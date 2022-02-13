@@ -1,16 +1,51 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Poidem_gulyat" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Poidem_gulyat" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="ThemeOverlay.Poidem_gulyat.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+
+    <style name="Theme.MyApplicationfull.Fullscreen" parent="Theme.Poidem_gulyat">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.Poidem_gulyat.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+    <style name="TextDefault">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextDefault</item>
+    </style>
+
+    <style name="TextLabelDefault">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextLabelDefault</item>
+    </style>
+
+    <style name="TextInputDefault">
+        <item name="android:textSize">18sp</item>
+        <item name="hintTextColor">@color/colorTextHintDefault</item>
+        <item name="android:textColor">@color/colorTextDefault</item>
+    </style>
+
+    <style name="ButtonPrimary">
+        <item name="android:background">@drawable/bg_button_primary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorTextWhite</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
 </resources>
