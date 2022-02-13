@@ -9,9 +9,8 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.databinding.FragmentLoginBinding
-import com.example.poidem_gulyat.ui.homeActivity.MainActivity
-import com.example.poidem_gulyat.utils.startNewActivity
-import dagger.hilt.android.AndroidEntryPoint
+
+
 
 import kotlinx.coroutines.*
 
@@ -27,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [LoginFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-@AndroidEntryPoint
+
 class LoginFragment() : Fragment(R.layout.fragment_login), CoroutineScope {
     private val navController : NavController by lazy { findNavController() }
     private val binding: FragmentLoginBinding by viewBinding()
