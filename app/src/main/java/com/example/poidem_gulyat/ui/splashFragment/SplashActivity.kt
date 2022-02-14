@@ -92,6 +92,10 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
         //
         //
         //
+
+        //
+        //
+        //
         launch {
             viewModelSplash.prefStateFlow.collect {
                 when (it) {
