@@ -81,6 +81,9 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun hide() {
+        //
+        //
+        //
         launch {
             viewModelSplash.prefStateFlow.collect {
                 when (it) {
