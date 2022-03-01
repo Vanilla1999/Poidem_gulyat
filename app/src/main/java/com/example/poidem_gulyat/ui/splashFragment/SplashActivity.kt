@@ -18,6 +18,8 @@ import com.example.poidem_gulyat.ui.homeActivity.MainActivity
 import com.example.poidem_gulyat.ui.login.LoginActivity
 import com.example.poidem_gulyat.utils.startNewActivity
 import com.example.poidem_gulyat.data.ResponseSplash
+import com.example.poidem_gulyat.utils.BaseActivity
+import com.example.poidem_gulyat.utils.PermissionTool
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -32,7 +34,7 @@ import kotlin.coroutines.CoroutineContext
  * status bar and navigation/system bar) with user interaction.
  */
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : AppCompatActivity(), CoroutineScope {
+class SplashActivity : BaseActivity(), CoroutineScope {
 
     @Inject
     lateinit var factory: SplashModel.FactorySplash
@@ -60,6 +62,24 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private val hideRunnable = Runnable { hide() }
+    override fun onAfterRequestPermission() {
+        initialFlow()
+    }
+
+    private fun initialFlow() {
+        launch {
+            viewModelSplash.prefStateFlow.collect {
+                when (it) {
+                    is ResponseSplash.Success -> startNewActivity(MainActivity::class.java)
+                    is ResponseSplash.Failure -> {
+                        Log.d("SplashActivity", " null ")
+                        finish()
+                        startNewActivity(LoginActivity::class.java)
+                    }
+                }
+            }
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,20 +97,9 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun hide() {
-        hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY.toLong())
-        launch {
-            viewModelSplash.prefStateFlow.collect {
-                when (it) {
-                    is ResponseSplash.Success -> startNewActivity(MainActivity::class.java)
-                    is ResponseSplash.Failure -> {
-                        Log.d("SplashActivity", " null ")
-                         finish()
-                         startNewActivity(LoginActivity::class.java)
-                    }
-                }
-            }
-        }
-
+        hidePart2Runnable
+        if(allPermissionGrandted())
+            initialFlow()
         //startNewActivity(MainActivity::class.java)
     }
 
