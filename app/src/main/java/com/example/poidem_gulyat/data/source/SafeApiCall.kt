@@ -1,6 +1,6 @@
 package com.otus.securehomework.data.source
 
-import com.otus.securehomework.data.Response
+import com.example.poidem_gulyat.data.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

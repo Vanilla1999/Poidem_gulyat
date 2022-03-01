@@ -1,7 +1,7 @@
 package com.otus.securehomework.data.repository
 
 import com.otus.securehomework.data.dto.TokenResponse
-import com.otus.securehomework.data.source.local.UserPreferences
+import com.example.poidem_gulyat.data.source.local.UserPreferences
 import com.otus.securehomework.data.source.network.TokenRefreshApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -10,7 +10,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
-import com.otus.securehomework.data.Response as DataResponse
+import com.example.poidem_gulyat.data.Response as DataResponse
 
 class TokenAuthenticator @Inject constructor(
     private val tokenApi: TokenRefreshApi,

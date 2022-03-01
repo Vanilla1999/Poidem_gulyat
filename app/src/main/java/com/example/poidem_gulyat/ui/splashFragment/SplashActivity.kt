@@ -6,14 +6,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.App.Companion.appComponentMain
 import com.example.poidem_gulyat.databinding.ActivitySplashBinding
 import com.example.poidem_gulyat.di.splashActivity.DaggerSplashActivitycomponent
@@ -21,7 +17,7 @@ import com.example.poidem_gulyat.di.splashActivity.SplashActivitycomponent
 import com.example.poidem_gulyat.ui.homeActivity.MainActivity
 import com.example.poidem_gulyat.ui.login.LoginActivity
 import com.example.poidem_gulyat.utils.startNewActivity
-import com.otus.securehomework.data.ResponseSplash
+import com.example.poidem_gulyat.data.ResponseSplash
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -81,37 +77,19 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun hide() {
-        //
-        //
-        //
-
-        //
-        //
-        //
-
-        //
-        //
-        //
-
-        //
-        //
-        //
-
-        //
-        //
-        //
+        hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY.toLong())
         launch {
             viewModelSplash.prefStateFlow.collect {
                 when (it) {
                     is ResponseSplash.Success -> startNewActivity(MainActivity::class.java)
                     is ResponseSplash.Failure -> {
                         Log.d("SplashActivity", " null ")
-                        // startNewActivity(LoginActivity::class.java)
+                         finish()
+                         startNewActivity(LoginActivity::class.java)
                     }
                 }
             }
         }
-        hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY.toLong())
 
         //startNewActivity(MainActivity::class.java)
     }

@@ -73,4 +73,6 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
     // bio
     implementation "androidx.biometric:biometric-ktx:1.2.0-alpha04"
+    // openStreetMap
+    implementation 'org.osmdroid:osmdroid-android:6.1.10'
 }

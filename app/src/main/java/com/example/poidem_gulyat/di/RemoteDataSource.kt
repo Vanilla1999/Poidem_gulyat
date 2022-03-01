@@ -2,7 +2,7 @@ package com.otus.securehomework.di
 
 import com.example.poidem_gulyat.BuildConfig
 import com.otus.securehomework.data.repository.TokenAuthenticator
-import com.otus.securehomework.data.source.local.UserPreferences
+import com.example.poidem_gulyat.data.source.local.UserPreferences
 import com.otus.securehomework.data.source.network.TokenRefreshApi
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient

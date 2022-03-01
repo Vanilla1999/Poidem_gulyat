@@ -1,8 +1,9 @@
-package com.otus.securehomework.data.repository
+package com.example.poidem_gulyat.data.repository
 
-import com.otus.securehomework.data.Response
-import com.otus.securehomework.data.dto.LoginResponse
-import com.otus.securehomework.data.source.local.UserPreferences
+import com.example.poidem_gulyat.data.Response
+import com.example.poidem_gulyat.data.dto.LoginResponse
+import com.otus.securehomework.data.repository.BaseRepository
+import com.example.poidem_gulyat.data.source.local.UserPreferences
 import com.otus.securehomework.data.source.network.AuthApi
 import javax.inject.Inject
 

@@ -1,26 +1,21 @@
 package com.example.poidem_gulyat.ui.splashFragment
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.otus.securehomework.data.Response
-import com.otus.securehomework.data.ResponseSplash
-import com.otus.securehomework.data.source.local.UserPreferences
+import com.example.poidem_gulyat.data.ResponseSplash
+import com.example.poidem_gulyat.data.source.local.UserPreferences
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 import javax.inject.Inject
-import javax.inject.Named
 
 class SplashModel (
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
-    private val _prefStateFlow: MutableStateFlow<ResponseSplash<Any?>> = MutableStateFlow(ResponseSplash.Loading)
+    private val _prefStateFlow: MutableStateFlow<ResponseSplash<Any?>> = MutableStateFlow(
+        ResponseSplash.Loading)
     val prefStateFlow: Flow<ResponseSplash<Any?>> = _prefStateFlow
 
     fun checkUser() {

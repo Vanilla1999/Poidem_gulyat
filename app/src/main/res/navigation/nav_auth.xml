@@ -9,13 +9,13 @@
     <fragment
         android:id="@+id/loginFragment"
         android:label="fragment_register"
-        android:name="com.otus.securehomework.presentation.auth.LoginFragment"
+        android:name="com.example.poidem_gulyat.ui.login.LoginFragment"
         tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/registrationFragment"
         android:label="fragment_register"
-        android:name="com.otus.securehomework.presentation.auth.RegisterFragment"
+        android:name="com.example.poidem_gulyat.ui.login.RegisterFragment"
         tools:layout="@layout/fragment_register" />
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.otus.securehomework.data
+package com.example.poidem_gulyat.data
 
 import okhttp3.ResponseBody
 
@@ -10,6 +10,7 @@ sealed class Response<out T> {
         val errorBody: ResponseBody?
     ) : Response<Nothing>()
     object Loading : Response<Nothing>()
+    object Empty : Response<Nothing>()
 }
 sealed class ResponseSplash<out T> {
     data class Success<out T>(val value: T) : ResponseSplash<T>()

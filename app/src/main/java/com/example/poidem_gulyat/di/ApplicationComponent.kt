@@ -1,9 +1,6 @@
 package com.example.poidem_gulyat.di
 
 import android.content.Context
-import com.otus.myapplication.crypto.Keys
-import com.otus.myapplication.crypto.Security
-import com.otus.securehomework.data.source.local.UserPreferences
 import com.otus.securehomework.data.source.network.AuthApi
 import com.otus.securehomework.data.source.network.UserApi
 import com.otus.securehomework.di.RemoteDataSource
@@ -11,9 +8,6 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.flow.MutableStateFlow
-import javax.inject.Named
-import javax.inject.Singleton
 
 
 @Module()
