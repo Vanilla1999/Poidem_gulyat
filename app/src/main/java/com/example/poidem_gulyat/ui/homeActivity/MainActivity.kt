@@ -1,6 +1,9 @@
 package com.example.poidem_gulyat.ui.homeActivity
+import android.content.ComponentName
+import android.content.ServiceConnection
 import android.graphics.Color
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,11 +15,15 @@ import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.databinding.ActivityMainBinding
 import android.util.DisplayMetrics
 import android.view.ViewGroup
+import com.example.poidem_gulyat.App.Companion.appComponentMain
+import com.example.poidem_gulyat.di.mainActivtiy.DaggerMainActvitityComponent
+import com.example.poidem_gulyat.di.mainActivtiy.MainActvitityComponent
+import com.example.poidem_gulyat.services.LocationService
 import com.example.poidem_gulyat.utils.BaseActivity
 
 
 class MainActivity : BaseActivity() {
-
+    lateinit var appComponent: MainActvitityComponent
     private lateinit var binding: ActivityMainBinding
     private val resourdisplayMetrics :DisplayMetrics by lazy { resources.displayMetrics }
     lateinit var navView: BottomNavigationView
@@ -25,6 +32,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent = DaggerMainActvitityComponent.factory().create( appComponentMain)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,6 +56,12 @@ class MainActivity : BaseActivity() {
             navView.setPadding(0, 0, 0, navigationBarSize)
         }
 
+        LocationService.startLocation(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocationService.stopService(this)
     }
 
     fun removeSystemInsets(view: View,listener: OnSystemInsetsChangedListener) {

@@ -1,9 +1,8 @@
 package com.example.poidem_gulyat.di.loginActivity
 
-import android.content.Context
-import com.example.poidem_gulyat.di.ActivityScope
-import com.example.poidem_gulyat.di.AppScope
+
 import com.example.poidem_gulyat.di.ApplicationComponent
+import com.example.poidem_gulyat.di.LoginActivityScope
 import com.example.poidem_gulyat.ui.login.LoginActivity
 import com.example.poidem_gulyat.ui.login.LoginFragment
 import com.example.poidem_gulyat.ui.splashFragment.SplashActivity
@@ -14,7 +13,7 @@ import javax.inject.Named
 
 
 
-@ActivityScope
+@LoginActivityScope
 @Component(
     dependencies = [ApplicationComponent::class],
 )

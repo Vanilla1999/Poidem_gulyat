@@ -10,13 +10,23 @@ import kotlin.reflect.KClass
 
 
 @Scope
-annotation class ActivityScope
+annotation class LoginActivityScope
 @Scope
 annotation class FragmentScope
 @Scope
-annotation class AppScope
+annotation class HomeScope
+@Scope
+annotation class MainActivityScope
+
+@Scope
+annotation class LocationServiceScope
+
+@Scope
+annotation class SplashActivityScope
 @Qualifier
 annotation class SplashAcitivityContext
+@Qualifier
+annotation class MainActivityContext
 @Qualifier
 annotation class ApplicationContext
 //@Named

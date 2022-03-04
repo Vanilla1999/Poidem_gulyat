@@ -108,12 +108,6 @@ class SplashActivity : BaseActivity(), CoroutineScope {
         hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
     }
 
-    companion object {
-        private const val AUTO_HIDE = true
-        private const val AUTO_HIDE_DELAY_MILLIS = 3000
-        private const val UI_ANIMATION_DELAY = 300
-    }
-
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + SupervisorJob()
 }

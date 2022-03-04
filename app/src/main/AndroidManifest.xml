@@ -41,6 +41,9 @@
             android:theme="@style/Theme.Poidem_gulyat">
 
         </activity>
+        <service
+            android:name=".services.LocationService"
+            android:exported="false" />
     </application>
 
 </manifest>
