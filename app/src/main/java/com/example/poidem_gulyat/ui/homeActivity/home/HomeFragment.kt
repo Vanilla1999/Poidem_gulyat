@@ -8,37 +8,27 @@ import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.App
 import com.example.poidem_gulyat.R
-import com.example.poidem_gulyat.data.Response
+import com.example.poidem_gulyat.customView.geo.CustomMe
 import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.databinding.FragmentHomeBinding
-import com.example.poidem_gulyat.di.loginActivity.DaggerLoginFragmentComponent
-import com.example.poidem_gulyat.di.loginActivity.LoginFragmentComponent
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerHomeFragmentComponent
 import com.example.poidem_gulyat.di.mainActivtiy.HomeFragmentComponent
 import com.example.poidem_gulyat.services.LocationService
 import com.example.poidem_gulyat.ui.homeActivity.MainActivity
-import com.example.poidem_gulyat.ui.login.FactoryLogin
-import com.example.poidem_gulyat.ui.login.LoginViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import org.osmdroid.views.MapView
+import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -48,10 +38,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
     private val job: Job = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-
+    private var firstOpen = true
     private var context: MainActivity? = null
     private var locationService: LocationService? = null
     lateinit var homeComponent: HomeFragmentComponent
+    private lateinit var mapController: IMapController
     private var locationUpdatesJob: Job? = null
 
     @Inject
@@ -72,7 +63,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         binding.map.setTileSource(TileSourceFactory.MAPNIK)
         // человечек на карте
-        val locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), binding.map);
+        val locationOverlay = CustomMe(binding.map);
         binding.map.overlays.add(locationOverlay)
         // повороты
         val rotationGestureOverlay = RotationGestureOverlay(context, binding.map);
@@ -80,24 +71,22 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         binding.map.setMultiTouchControls(true);
         binding.map.overlays.add(rotationGestureOverlay);
         // инициализация карты типа координата, тут нужен будет сервис координат. +анимация загрузки прикольная
-        val mapController = binding.map.controller
-        mapController.setZoom(9.5)
-        val startPoint = GeoPoint(48.8583, 2.2944);
-        mapController.setCenter(startPoint);
     }
 
     private fun initFlow() {
-        locationUpdatesJob =  lifecycleScope.launch{
+        locationUpdatesJob = lifecycleScope.launch {
             if (viewModelHome.locationFlow != null) {
                 viewModelHome.locationFlow!!.collect {
                     when (it) {
                         is ResponseSplash.Success -> {
                             val location = (it.value as Location)
+                            if (firstOpen){
+                                mapController.animateTo(GeoPoint(location.latitude,location.longitude))
+                                firstOpen = false
+                            }
                             Log.d("kek", (it.value as Location).latitude.toString())
-                            val mapController = binding.map.controller
-                            mapController.setZoom(9.5)
-                            val startPoint = GeoPoint(location.latitude, location.longitude);
-                            mapController.setCenter(startPoint);
+                            (binding.map.overlays[0] as CustomMe).setLocation(location)
+                            binding.map.visibility = View.VISIBLE
                         }
                         is ResponseSplash.Failure -> Log.d("kek", " что то случилось")
                     }
@@ -111,6 +100,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         binding.map.onResume();
         Log.d("onResume", "onResume onResume")
         LocationService.customBindService(context as Context, this)
+        mapController = binding.map.controller
+        mapController.setZoom(15.0)
+        firstOpen = true
     }
 
     override fun onPause() {

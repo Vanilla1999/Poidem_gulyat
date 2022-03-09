@@ -72,7 +72,7 @@ class LocationService : Service(), CoroutineScope, GpsListener {
         val command = extras?.getInt(SERVICE_TASK) ?: START_SERVICE
 
         when (command) {
-            START_SERVICE -> {}
+            START_SERVICE -> { initLocationSearching()}
             STOP_SERVICE ->
                 stopSelf()
         }
@@ -93,7 +93,6 @@ class LocationService : Service(), CoroutineScope, GpsListener {
 
     inner class LocationServiceBinder : Binder() {
         fun getService(): LocationService {
-            initLocationSearching()
             Log.e("LocationUpdate", " Координата записывается2")
             return this@LocationService
         }
@@ -110,6 +109,14 @@ class LocationService : Service(), CoroutineScope, GpsListener {
         gpsRepository.setLocationListener(null)
         gpsRepository.stopListen()
     }
+
+//    private fun stopStateView(){
+//        _locationFlow.emit(ResponseSplash.Loading)
+//    }
+//
+//    private fun startStateView(){
+//        _locationFlow
+//    }
 
     private fun initLocationSearching() {
         gpsRepository.setLocationListener(this)
