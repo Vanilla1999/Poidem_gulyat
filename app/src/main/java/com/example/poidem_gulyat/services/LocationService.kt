@@ -72,12 +72,14 @@ class LocationService : Service(), CoroutineScope, GpsListener {
         val command = extras?.getInt(SERVICE_TASK) ?: START_SERVICE
 
         when (command) {
-            START_SERVICE -> { initLocationSearching()}
+            START_SERVICE -> {
+                Log.e("START_SERVICE", " Координата записывается")
+                initLocationSearching()}
             STOP_SERVICE ->
                 stopSelf()
         }
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {

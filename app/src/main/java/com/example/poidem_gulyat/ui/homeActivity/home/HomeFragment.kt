@@ -75,21 +75,19 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
 
     private fun initFlow() {
         locationUpdatesJob = lifecycleScope.launch {
-            if (viewModelHome.locationFlow != null) {
-                viewModelHome.locationFlow!!.collect {
-                    when (it) {
-                        is ResponseSplash.Success -> {
-                            val location = (it.value as Location)
-                            if (firstOpen){
-                                mapController.animateTo(GeoPoint(location.latitude,location.longitude))
-                                firstOpen = false
-                            }
-                            Log.d("kek", (it.value as Location).latitude.toString())
-                            (binding.map.overlays[0] as CustomMe).setLocation(location)
-                            binding.map.visibility = View.VISIBLE
+            viewModelHome.locationFlow!!.collect {
+                when (it) {
+                    is ResponseSplash.Success -> {
+                        val location = (it.value as Location)
+                        if (firstOpen) {
+                            mapController.animateTo(GeoPoint(location.latitude, location.longitude))
+                            firstOpen = false
                         }
-                        is ResponseSplash.Failure -> Log.d("kek", " что то случилось")
+                        Log.d("kek", (it.value as Location).latitude.toString())
+                        (binding.map.overlays[0] as CustomMe).setLocation(location)
+                        binding.map.visibility = View.VISIBLE
                     }
+                    is ResponseSplash.Failure -> Log.d("kek", " что то случилось")
                 }
             }
         }
