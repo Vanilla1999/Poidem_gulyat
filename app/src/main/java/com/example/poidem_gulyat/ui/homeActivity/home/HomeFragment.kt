@@ -53,9 +53,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        homeComponent = DaggerHomeFragmentComponent.factory().create(App.appComponentMain)
-        homeComponent.inject(this)
         this.context = context as MainActivity
+        homeComponent = DaggerHomeFragmentComponent.factory().create((requireActivity() as MainActivity).activityComponent)
+        homeComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,12 +88,14 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                         binding.map.visibility = View.VISIBLE
                     }
                     is ResponseSplash.Failure -> Log.d("kek", " что то случилось")
+                    else -> {}
                 }
             }
         }
     }
 
     override fun onResume() {
+
         super.onResume();
         binding.map.onResume();
         Log.d("onResume", "onResume onResume")

@@ -2,7 +2,9 @@ package com.example.poidem_gulyat.data.repository.location
 
 import com.example.poidem_gulyat.data.dto.UserLocation
 import com.example.poidem_gulyat.data.source.database.DatabaseMain
+import com.otus.securehomework.data.dto.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class UserLocationRepositoryImpl @Inject constructor(

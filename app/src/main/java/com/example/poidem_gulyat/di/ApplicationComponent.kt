@@ -27,6 +27,7 @@ class ApplicationModule {
         val builder = Room.databaseBuilder(
             context, DatabaseMain::class.java, DatabaseMain.DATABASE
         )
+        builder.addMigrations(*DatabaseMain.migrations)
         return builder.build()
     }
 

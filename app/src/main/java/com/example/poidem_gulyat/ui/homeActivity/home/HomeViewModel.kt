@@ -7,6 +7,7 @@ import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.data.dto.LoginResponse
 import com.example.poidem_gulyat.data.repository.AuthRepository
 import com.example.poidem_gulyat.data.repository.hardware.GpsRepository
+import com.example.poidem_gulyat.data.repository.markers.MarkerManager
 import com.example.poidem_gulyat.data.source.local.UserPreferences
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class HomeViewModel(
     private val userPreferences: UserPreferences,
     private val gpsRepository: GpsRepository,
+    private val markerManager: MarkerManager
 ) : ViewModel() {
 
     var locationFlow: StateFlow<ResponseSplash<Any?>>? = null
@@ -39,8 +41,9 @@ class HomeViewModel(
 class FactoryHomeView @Inject constructor(
     private val userPreferences: UserPreferences,
     private val gpsRepository: GpsRepository,
+    private val markerManager: MarkerManager
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HomeViewModel(userPreferences, gpsRepository) as T
+        return HomeViewModel(userPreferences, gpsRepository,markerManager) as T
     }
 }

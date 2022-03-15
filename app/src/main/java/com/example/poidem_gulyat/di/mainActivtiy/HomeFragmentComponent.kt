@@ -8,13 +8,12 @@ import dagger.Component
 
 @HomeScope
 @Component(
-    dependencies = [ApplicationComponent::class],
+    dependencies = [MainActvitityComponent::class],
 )
 interface HomeFragmentComponent {
     fun inject(fragment: HomeFragment)
     @Component.Factory
     interface Factory {
-
-        fun create(applicationComponent: ApplicationComponent): HomeFragmentComponent
+        fun create(applicationComponent: MainActvitityComponent): HomeFragmentComponent
     }
 }

@@ -76,6 +76,7 @@ class SplashActivity : BaseActivity(), CoroutineScope {
                         finish()
                         startNewActivity(LoginActivity::class.java)
                     }
+                    else -> {}
                 }
             }
         }

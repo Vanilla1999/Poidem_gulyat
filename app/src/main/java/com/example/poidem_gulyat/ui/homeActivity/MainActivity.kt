@@ -23,7 +23,7 @@ import com.example.poidem_gulyat.utils.BaseActivity
 
 
 class MainActivity : BaseActivity() {
-    lateinit var appComponent: MainActvitityComponent
+    lateinit var activityComponent: MainActvitityComponent
     private lateinit var binding: ActivityMainBinding
     private val resourdisplayMetrics :DisplayMetrics by lazy { resources.displayMetrics }
     lateinit var navView: BottomNavigationView
@@ -32,7 +32,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        appComponent = DaggerMainActvitityComponent.factory().create( appComponentMain)
+        activityComponent = DaggerMainActvitityComponent.factory().create( appComponentMain)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -55,13 +55,16 @@ class MainActivity : BaseActivity() {
         setWindowTransparency { _, navigationBarSize ->
             navView.setPadding(0, 0, 0, navigationBarSize)
         }
-
-        LocationService.startLocation(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
         LocationService.stopService(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocationService.startLocation(this)
     }
 
     fun removeSystemInsets(view: View,listener: OnSystemInsetsChangedListener) {
