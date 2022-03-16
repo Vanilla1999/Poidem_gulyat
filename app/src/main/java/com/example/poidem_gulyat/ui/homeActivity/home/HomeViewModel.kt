@@ -1,8 +1,10 @@
 package com.example.poidem_gulyat.ui.homeActivity.home
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.poidem_gulyat.data.Response
+import com.example.poidem_gulyat.data.ResponseHome
 import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.data.dto.LoginResponse
 import com.example.poidem_gulyat.data.repository.AuthRepository
@@ -19,6 +21,11 @@ class HomeViewModel(
     private val markerManager: MarkerManager
 ) : ViewModel() {
 
+
+    val _buttonsState:MutableStateFlow<ResponseHome> =  MutableStateFlow(
+        ResponseHome.Loading)
+    val buttonStateFlow :StateFlow<ResponseHome> = _buttonsState
+
     var locationFlow: StateFlow<ResponseSplash<Any?>>? = null
 
     suspend fun getLastLocation() = flow<ResponseSplash<Location?>> {
@@ -31,8 +38,16 @@ class HomeViewModel(
         }
     }
 
+    fun attractionButtonClick(){
+        viewModelScope.launch {
+            _buttonsState.emit(ResponseHome.Attraction)
+            markerManager.locationFlow.emit(ResponseHome.Attraction)
+            Log.d("attractionButtonClick", "Attraction")
+        }
+    }
     override fun onCleared() {
         super.onCleared()
+        Log.d("onCleared", "onCleared onCleared")
         locationFlow = null
     }
 }

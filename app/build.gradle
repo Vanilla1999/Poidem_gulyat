@@ -39,6 +39,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
 }
 
 dependencies {
@@ -81,4 +84,5 @@ dependencies {
     implementation "androidx.biometric:biometric-ktx:1.2.0-alpha04"
     // openStreetMap
     implementation 'org.osmdroid:osmdroid-android:6.1.10'
+
 }

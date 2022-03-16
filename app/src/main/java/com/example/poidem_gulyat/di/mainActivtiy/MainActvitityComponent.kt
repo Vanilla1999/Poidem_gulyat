@@ -11,6 +11,8 @@ import com.example.poidem_gulyat.data.source.gps.GpsDataSourceImpl
 import com.example.poidem_gulyat.di.ApplicationComponent
 import com.example.poidem_gulyat.di.ApplicationContext
 import com.example.poidem_gulyat.di.MainActivityScope
+import com.example.poidem_gulyat.ui.homeActivity.MainActivity
+import com.example.poidem_gulyat.ui.homeActivity.home.HomeFragment
 import com.example.poidem_gulyat.ui.login.LoginFragment
 import dagger.Binds
 import dagger.Component
@@ -20,7 +22,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Module
-interface MainModule {
+class MainModule {
+    @Provides
+    @MainActivityScope
+    fun provideMarkerManager(
+         attractionRepository: AttractionRepository,
+         photoZoneRepository: PhotoZoneRepository,
+         userPointRepository: UserPointRepository
+    ):MarkerManager{
+        return MarkerManager(attractionRepository, photoZoneRepository, userPointRepository)
+    }
 }
 
 @Module
@@ -48,6 +59,8 @@ interface BindingModule {
 )
 interface MainActvitityComponent {
 
+    fun provideMarkerManager():MarkerManager
+
     fun provideGpsRepo(): GpsRepository
 
     fun provideGpsSource(): GpsDataSource
@@ -63,6 +76,8 @@ interface MainActvitityComponent {
 
     @ApplicationContext
     fun getApplication(): Context
+
+    fun inject(activity: MainActivity)
 
     @Component.Factory
     interface Factory {

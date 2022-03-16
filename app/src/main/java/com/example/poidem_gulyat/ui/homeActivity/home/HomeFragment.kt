@@ -16,6 +16,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.App
 import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.customView.geo.CustomMe
+import com.example.poidem_gulyat.data.ResponseHome
 import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.databinding.FragmentHomeBinding
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerHomeFragmentComponent
@@ -54,23 +55,42 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.context = context as MainActivity
-        homeComponent = DaggerHomeFragmentComponent.factory().create((requireActivity() as MainActivity).activityComponent)
+        homeComponent = DaggerHomeFragmentComponent.factory()
+            .create((requireActivity() as MainActivity).activityComponent)
         homeComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-        binding.map.setTileSource(TileSourceFactory.MAPNIK)
-        // человечек на карте
-        val locationOverlay = CustomMe(binding.map);
-        binding.map.overlays.add(locationOverlay)
-        // повороты
-        val rotationGestureOverlay = RotationGestureOverlay(context, binding.map);
-        rotationGestureOverlay.isEnabled
-        binding.map.setMultiTouchControls(true);
-        binding.map.overlays.add(rotationGestureOverlay);
+        //  getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+//        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+//        // человечек на карте
+//        val locationOverlay = CustomMe(binding.map);
+//        binding.map.overlays.add(locationOverlay)
+//        // повороты
+//        val rotationGestureOverlay = RotationGestureOverlay(context, binding.map);
+//        rotationGestureOverlay.isEnabled
+//        binding.map.setMultiTouchControls(true);
+//        binding.map.overlays.add(rotationGestureOverlay);
         // инициализация карты типа координата, тут нужен будет сервис координат. +анимация загрузки прикольная
+        binding.attractionButton.setOnClickListener {
+            viewModelHome.attractionButtonClick()
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModelHome.buttonStateFlow.collect {
+                when (it) {
+                    ResponseHome.Attraction -> {
+                        binding.userPointButton.hide()
+                        binding.photoZoneButton.hide()
+                    }
+                    else -> {}
+                }
+            }
+        }
+        binding.kek.setOnTouchListener { _, _ ->
+            Log.d("HomeFragment", "onTouch")
+            false
+        }
     }
 
     private fun initFlow() {
@@ -80,12 +100,13 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                     is ResponseSplash.Success -> {
                         val location = (it.value as Location)
                         if (firstOpen) {
-                            mapController.animateTo(GeoPoint(location.latitude, location.longitude))
+//                            mapController.setZoom(15.0)
+//                            mapController.animateTo(GeoPoint(location.latitude, location.longitude))
                             firstOpen = false
                         }
                         Log.d("kek", (it.value as Location).latitude.toString())
-                        (binding.map.overlays[0] as CustomMe).setLocation(location)
-                        binding.map.visibility = View.VISIBLE
+                        //(binding.map.overlays[0] as CustomMe).setLocation(location)
+                        //binding.map.visibility = View.VISIBLE
                     }
                     is ResponseSplash.Failure -> Log.d("kek", " что то случилось")
                     else -> {}
@@ -97,23 +118,23 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
     override fun onResume() {
 
         super.onResume();
-        binding.map.onResume();
+        //   binding.map.onResume();
         Log.d("onResume", "onResume onResume")
-        LocationService.customBindService(context as Context, this)
-        mapController = binding.map.controller
-        mapController.setZoom(15.0)
+        // LocationService.customBindService(context as Context, this)
+        // mapController = binding.map.controller
         firstOpen = true
     }
 
     override fun onPause() {
         super.onPause();
         Log.d("onPause", "onPause onPause")
-        binding.map.onPause();
-        LocationService.customUnbindService(context as Context, this)
+        //  binding.map.onPause();
+        // LocationService.customUnbindService(context as Context, this)
         locationService?.locationServiceListener = null
         locationService = null
-        viewModelHome.locationFlow = null
-        locationUpdatesJob!!.cancel()
+        //viewModelHome.locationFlow = null
+        // getInstance().save(context, PreferenceManager.getDefaultSharedPreferences(context))
+        //  locationUpdatesJob!!.cancel()
     }
 
     override fun onDestroyView() {
@@ -126,7 +147,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         service as LocationService.LocationServiceBinder
         locationService = service.getService()
         viewModelHome.locationFlow = locationService?.locationFlow
-        initFlow()
+        //  initFlow()
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {

@@ -1,5 +1,6 @@
 package com.example.poidem_gulyat.data.source.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
@@ -22,17 +23,20 @@ import com.example.poidem_gulyat.data.source.database.dao.UserPointDao
         Attraction::class,
         UserPoint::class
     ],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ],
     exportSchema = true
 )
-abstract class DatabaseMain: RoomDatabase() {
+abstract class DatabaseMain : RoomDatabase() {
     abstract fun userLocation(): UserLocationDao
     abstract fun photoZone(): PhotoZoneDao
     abstract fun userPoint(): UserPointDao
     abstract fun attraction(): AttractionDao
+
     companion object {
         val migrations: Array<Migration> = arrayOf(
-            object : Migration(1, 2) { override fun migrate(database: SupportSQLiteDatabase) {} }
         )
         const val DATABASE = "gulyat"
-        }
+    }
 }
