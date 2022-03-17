@@ -21,6 +21,10 @@ class UserPointRepositoryImpl @Inject constructor(
         databaseSource.userPoint().insertOrUpdate(item)
     }
 
+    override suspend fun insertList(item: List<UserPoint>) {
+        databaseSource.userPoint().insertOrUpdate(item)
+    }
+
     override suspend fun delete(list: List<UserPoint>) {
         databaseSource.userPoint().delete(list)
     }

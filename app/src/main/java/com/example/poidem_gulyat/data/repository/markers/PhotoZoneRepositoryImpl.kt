@@ -20,6 +20,10 @@ class PhotoZoneRepositoryImpl @Inject constructor(
        databaseSource.photoZone().insertOrUpdate(item)
     }
 
+    override suspend fun insertList(item: List<PhotoZone>) {
+        databaseSource.photoZone().insertOrUpdate(item)
+    }
+
     override suspend fun delete(list: List<PhotoZone>) {
         databaseSource.photoZone().delete(list)
     }

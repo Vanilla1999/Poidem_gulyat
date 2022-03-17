@@ -14,19 +14,23 @@ import javax.inject.Inject
 class AttractionRepositoryImpl @Inject constructor(
     private val databaseSource: DatabaseMain,
 ) : AttractionRepository, BaseRepositoryDataBase() {
-    override suspend fun getAllAttractionsSuitRating(rating: Double): Flow<ResponseDataBase> {
+    override suspend fun getAllAttractionsSuitRating(rating: Double): Flow<ResponseDataBase<Any?>> {
         return databaseSource.attraction().getAllAttractionSuitRating(rating).transform {
             doWork(it, this)
         }
     }
 
-    override suspend fun getAllAttractions(): Flow<ResponseDataBase> {
+    override suspend fun getAllAttractions(): Flow<ResponseDataBase<Any?>> {
         return databaseSource.attraction().getAllAttractions().transform {
             doWork(it, this)
         }
     }
 
     override suspend fun insert(item: Attraction) {
+        databaseSource.attraction().insertOrUpdate(item)
+    }
+
+    override suspend fun insertList(item: List<Attraction>) {
         databaseSource.attraction().insertOrUpdate(item)
     }
 

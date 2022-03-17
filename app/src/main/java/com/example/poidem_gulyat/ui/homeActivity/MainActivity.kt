@@ -26,14 +26,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.poidem_gulyat.App.Companion.appComponentMain
 import com.example.poidem_gulyat.customView.geo.CustomMe
+import com.example.poidem_gulyat.data.ErrorApp
 import com.example.poidem_gulyat.data.ResponseDataBase
+import com.example.poidem_gulyat.data.ResponseHome
 import com.example.poidem_gulyat.data.ResponseSplash
+import com.example.poidem_gulyat.data.dto.Attraction
+import com.example.poidem_gulyat.data.dto.PhotoZone
+import com.example.poidem_gulyat.data.dto.UserPoint
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerMainActvitityComponent
 import com.example.poidem_gulyat.di.mainActivtiy.MainActvitityComponent
 import com.example.poidem_gulyat.services.LocationService
 import com.example.poidem_gulyat.ui.homeActivity.home.FactoryHomeView
 import com.example.poidem_gulyat.ui.homeActivity.home.HomeViewModel
 import com.example.poidem_gulyat.utils.BaseActivity
+import com.example.poidem_gulyat.utils.tryCast
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.osmdroid.api.IMapController
@@ -61,7 +67,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
     private lateinit var mapController: IMapController
-    private var context:MainActivity?= null
+    private var context: MainActivity? = null
     override fun onAfterRequestPermission() {
         //  TODO("Not yet implemented")
     }
@@ -75,7 +81,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         activityComponent = DaggerMainActvitityComponent.factory().create(appComponentMain)
         activityComponent.inject(this)
         super.onCreate(savedInstanceState)
-        context= this
+        context = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         navView = binding.navView
@@ -86,9 +92,10 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         }
         initMap()
         initFlowDatabase()
+        intiFlowError()
     }
 
-    fun initMap() {
+    private fun initMap() {
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         binding.map.setTileSource(TileSourceFactory.MAPNIK)
         // человечек на карте
@@ -123,16 +130,29 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         }
     }
 
+    private fun intiFlowError(){
+        lifecycleScope.launchWhenResumed {
+            viewModelMain.sharedStateFlowError.collect {
+                when(it){
+                    is ErrorApp.FailureDataBase ->{ Toast.makeText(context,
+                        it.value.toString(),
+                        Toast.LENGTH_LONG)
+                        .show()}
+                    is ErrorApp.FailureUnknown ->{ Toast.makeText(context,
+                        it.value.toString(),
+                        Toast.LENGTH_LONG)
+                        .show()}
+                }
+            }
+        }
+    }
+
     private fun initFlowDatabase() {
         lifecycleScope.launchWhenResumed {
-            viewModelMain.responseDataBaseStateFlow.collect {
+            viewModelMain.responseDataBaseAttracitonStateFlow.collect {
                 when (it) {
-                    is ResponseDataBase.Success<*> -> {
-                        it.value
-                        Toast.makeText(context,
-                            "Данные есть",
-                            Toast.LENGTH_LONG)
-                            .show()
+                    is ResponseDataBase.Success -> {
+                        ifSuccess(it.value)
                     }
                     is ResponseDataBase.Failure -> {
                         Toast.makeText(context,
@@ -146,15 +166,42 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
                             Toast.LENGTH_LONG)
                             .show()
                     }
-                    else -> {}
+                    is ResponseDataBase.Clear -> {}
                 }
             }
         }
     }
 
+
+    private fun ifSuccess(it: Any?) {
+        it.tryCast<List<Attraction>> {
+            Toast.makeText(context,
+                "Данные есть Attraction   $this",
+                Toast.LENGTH_LONG)
+                .show()
+        }
+        it.tryCast<List<PhotoZone>> {
+            Toast.makeText(context,
+                "Данные есть PhotoZone",
+                Toast.LENGTH_LONG)
+                .show()
+        }
+        it.tryCast<List<UserPoint>> {
+            Toast.makeText(context,
+                "Данные есть UserPoint",
+                Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun paintAttraction(listAttraction: List<Attraction>) {
+
+    }
+
     override fun onPause() {
         super.onPause()
         binding.map.onPause();
+        Log.d("Main", "onPause")
         LocationService.stopService(this)
         LocationService.customUnbindService(this, this)
         locationService?.locationServiceListener = null

@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "photoZones",
 )
 data class PhotoZone(
+    val name:String,
     val latitude: Double,
     val longitude: Double,
     val img: ByteArray?,

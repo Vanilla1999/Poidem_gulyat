@@ -17,7 +17,7 @@ abstract class BaseRepository(
 
 abstract class BaseRepositoryDataBase(
 ) {
-    protected suspend fun <T> doWork(value: List<T>, collector: FlowCollector<ResponseDataBase>) {
+    protected suspend fun <T> doWork(value: List<T>, collector: FlowCollector<ResponseDataBase<*>>) {
         try {
             if (value.isEmpty()) {
                 collector.emit(ResponseDataBase.Empty)

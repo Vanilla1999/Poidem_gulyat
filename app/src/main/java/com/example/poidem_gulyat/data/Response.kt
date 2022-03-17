@@ -27,14 +27,14 @@ sealed class ResponseHome {
     object UserPoint : ResponseHome()
 }
 
-sealed class ResponseDataBase {
-    data class Success<out T>(val value: T) : ResponseDataBase()
+sealed class ResponseDataBase<out T> {
+    data class Success<out T>(val value: T) : ResponseDataBase<T>()
     data class Failure(
         val errorBody: Throwable,
-    ) : ResponseDataBase()
+    ) : ResponseDataBase<Nothing>()
 
-    object Empty : ResponseDataBase()
-    object Looding : ResponseDataBase()
+    object Empty : ResponseDataBase<Nothing>()
+    object Clear : ResponseDataBase<Nothing>()
 //    companion object {
 //        inline fun <T> on(f: () -> T): ResponseDataBase<T> = try {
 //            Success(f())
@@ -53,4 +53,9 @@ sealed class ResponseDataBase {
 //                is ResponseDataBase.Empty -> empty()
 //            }
 //    }
+}
+
+sealed class ErrorApp<out T> {
+    data class FailureDataBase<out T>(val value: T) : ErrorApp<T>()
+    data class FailureUnknown<out T>(val value: T) : ErrorApp<T>()
 }

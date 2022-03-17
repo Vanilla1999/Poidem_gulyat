@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "attractions",
 )
 data class Attraction(
+    val name:String,
     val latitude: Double,
     val longitude: Double,
     val img: ByteArray?,

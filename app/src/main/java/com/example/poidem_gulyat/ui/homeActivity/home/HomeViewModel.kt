@@ -24,7 +24,7 @@ class HomeViewModel(
 
     val _buttonsState:MutableStateFlow<ResponseHome> =  MutableStateFlow(
         ResponseHome.Loading)
-    val buttonStateFlow :StateFlow<ResponseHome> = _buttonsState
+    val buttonStateFlow :StateFlow<ResponseHome> = _buttonsState.asStateFlow()
 
     var locationFlow: StateFlow<ResponseSplash<Any?>>? = null
 

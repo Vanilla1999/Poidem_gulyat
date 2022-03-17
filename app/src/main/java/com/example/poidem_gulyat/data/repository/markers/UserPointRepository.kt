@@ -5,15 +5,20 @@ import com.example.poidem_gulyat.data.dto.UserPoint
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
-interface UserPointRepository {
+interface MainRepo <T>{
+    suspend fun insert(item: T)
+
+    suspend fun insertList(item:List<T>)
+
+    suspend fun delete(list: List<T>)
+}
+
+interface UserPointRepository :MainRepo<UserPoint> {
 
     suspend fun getAllUserPointsSuitRating(rating:Double): Flow<List<UserPoint>>
 
     suspend fun getAllUserPoints(): Flow<List<UserPoint>>
 
-    suspend fun insert(item: UserPoint)
-
-    suspend fun delete(list: List<UserPoint>)
 }
 
 interface MarkerRepository {

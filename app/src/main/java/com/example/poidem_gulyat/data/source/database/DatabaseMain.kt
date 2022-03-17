@@ -16,7 +16,7 @@ import com.example.poidem_gulyat.data.source.database.dao.UserPointDao
 
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [
         UserLocation::class,
         PhotoZone::class,
@@ -24,7 +24,8 @@ import com.example.poidem_gulyat.data.source.database.dao.UserPointDao
         UserPoint::class
     ],
     autoMigrations = [
-        AutoMigration(from = 1, to = 2)
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3)
     ],
     exportSchema = true
 )
