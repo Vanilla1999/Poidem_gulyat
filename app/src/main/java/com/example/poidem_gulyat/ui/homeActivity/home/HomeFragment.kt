@@ -110,41 +110,53 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                 }
             }
         }
-//       // binding.fragmentHome.transitionToEnd()
-//        binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
-//        binding.dopInfoHomeMain.dopInfo.setTransitionListener(object : MotionLayout.TransitionListener {
-//            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-//                binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
-//                Log.d("kek", "onTransitionCompleted")
-//            }
-//
-//            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
-//                Log.d("kek", "onTransitionTrigger")
-//            }
-//
-//            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-//                Log.d("kek", "onTransitionStarted")
-//            }
-//
-//            override fun onTransitionChange(
-//                motionLayout: MotionLayout?,
-//                startId: Int,
-//                endId: Int,
-//                progress: Float
-//            ) {
-//                Log.d("kek", "onTransitionChange")
-//            }
-//        })
-//        binding.fragmentHome.setOnTouchListener { _, _ ->
-//            binding.dopInfoHomeMain.dopInfoHome.dopInfoHome.setOnTouchListener { _, event ->
-//                when(event.action){
-//                    MotionEvent.ACTION_UP ->binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
-//                    MotionEvent.ACTION_DOWN ->binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = true
-//                }
-//                true
-//            }
-//            false
-//        }
+       // binding.motionBase.transitionToEnd()
+        binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
+        binding.dopInfoHomeMain.dopInfo.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
+                Log.d("kek", "onTransitionCompleted")
+            }
+
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+                Log.d("kek", "onTransitionTrigger")
+            }
+
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+                Log.d("kek", "onTransitionStarted")
+            }
+
+            override fun onTransitionChange(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int,
+                progress: Float
+            ) {
+                Log.d("kek", "onTransitionChange")
+            }
+        })
+        binding.dopInfoHomeMain.dopInfoHome.dopInfoHome.setOnTouchListener { _, event ->
+            when(event.action){
+                MotionEvent.ACTION_UP ->{
+                    binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
+                    Log.d("kek", "ACTION_UP")
+                }
+                MotionEvent.ACTION_DOWN ->{
+                    binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = true
+                    binding.dopInfoHomeMain.dopInfo.dispatchTouchEvent(event)
+                    Log.d("kek", "ACTION_DOWN")
+                }
+                MotionEvent.ACTION_HOVER_MOVE ->{
+                    binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = true
+                    binding.dopInfoHomeMain.dopInfo.dispatchTouchEvent(event)
+                    Log.d("kek", "ACTION_HOVER_MOVE")
+                }
+            }
+            true
+        }
+        binding.fragmentHome.setOnTouchListener { _, _ ->
+            false
+        }
     }
 
     private fun initFlow() {

@@ -106,18 +106,23 @@ class MainViewModel(
             ))
         markerManager.photoZoneRepository.insertList(
             listOf(
-                PhotoZone("EasyPhoto.Studio", 45.03215, 39.02482, null,
-                    "EasyPhoto.Studio ", 2234234f, 2234234f, 5.0),
-                PhotoZone("Alice", 45.06229, 38.99264, null,
-                    "Alice", 2234234f, 2234234f, 5.0),
-                PhotoZone("Белый осел", 45.06326, 38.99113, null,
-                    "Белый осел ", 2234234f, 2234234f, 5.0)
+                PhotoZone(name ="EasyPhoto.Studio", latitude = 45.03215, longitude = 39.02482,
+                    img = null,
+                    description = "EasyPhoto.Studio ", startWork = 2234234f, endWork = 2234234f,
+                    rating = 5.0),
+                PhotoZone(name ="Alice", latitude = 45.06229, longitude = 38.99264, img = null,
+                    description = "Alice", startWork = 2234234f, endWork = 2234234f, rating = 5.0),
+                PhotoZone(name ="Белый осел", latitude = 45.06326, longitude = 38.99113, img = null,
+                    description = "Белый осел ", startWork = 2234234f, endWork = 2234234f,
+                    rating = 5.0)
             )
         )
         markerManager.userPointRepository.insertList(
             listOf(
-                UserPoint("Аллея на Московской", 45.06797, 39.01165, null,
-                    "Аллея на Московской ", 2234234f, 2234234f, 5.0)
+                UserPoint(name ="Аллея на Московской", latitude = 45.06797,
+                    longitude = 39.01165, img = null,
+                    description = "Аллея на Московской ", startWork = 2234234f,
+                    endWork = 2234234f, rating = 5.0)
             ))
     }
 

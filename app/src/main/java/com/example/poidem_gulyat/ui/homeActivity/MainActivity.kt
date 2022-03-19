@@ -40,7 +40,9 @@ import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Marker.OnMarkerClickListener
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -201,6 +203,32 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         }
     }
 
+    private fun clickListener(marker: Marker,mapView: MapView,type:Any):OnMarkerClickListener{
+        type.tryCast<Attraction> { return  OnMarkerClickListener { _, _ ->
+            mapView.controller.animateTo(marker.position)
+            toast.setText("Отображение достопримечательностей")
+            toast.show()
+            true
+        } }
+        type.tryCast<PhotoZone> { return  OnMarkerClickListener { _, _ ->
+            mapView.controller.animateTo(marker.position)
+            toast.setText("Отображение фото-студий/фото-зон")
+            toast.show()
+            true
+        } }
+        type.tryCast<UserPoint> { return  OnMarkerClickListener { _, _ ->
+            mapView.controller.animateTo(marker.position)
+            toast.setText("Отображение мест от пользователей")
+            toast.show()
+            true
+        } }
+        return  OnMarkerClickListener { _, _ ->
+            mapView.controller.animateTo(marker.position)
+            true
+        }
+    }
+
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun paintAttraction(listAttraction: List<Attraction>) {
         listAttraction.forEach {
@@ -209,10 +237,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
            // val infoWindow = InfoWindow(R.layout.bonuspack_bubble,binding.map)
             startMarker.position = startPoint
             startMarker.setInfoWindow(null)
-            startMarker.setOnMarkerClickListener { marker, mapView ->
-               mapView.controller.animateTo(marker.position)
-                return@setOnMarkerClickListener true
-            }
+            startMarker.setOnMarkerClickListener (clickListener(marker = startMarker, mapView = binding.map,it))
           //  startMarker.setInfoWindow()
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             startMarker.icon = this.getDrawable(R.drawable.ic_baseline_account_balance_24)
@@ -227,6 +252,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
             val startPoint = GeoPoint(it.latitude, it.longitude)
             val startMarker = Marker(binding.map)
             startMarker.position = startPoint
+            startMarker.setOnMarkerClickListener (clickListener(marker = startMarker, mapView = binding.map,it))
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             startMarker.icon = this.getDrawable(R.drawable.ic_baseline_photo_camera_24)
             binding.map.overlays.add(startMarker)
@@ -240,6 +266,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
             val startPoint = GeoPoint(it.latitude, it.longitude)
             val startMarker = Marker(binding.map)
             startMarker.position = startPoint
+            startMarker.setOnMarkerClickListener (clickListener(marker = startMarker, mapView = binding.map,it))
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             startMarker.icon = this.getDrawable(R.drawable.ic_baseline_emoji_people_24)
             binding.map.overlays.add(startMarker)

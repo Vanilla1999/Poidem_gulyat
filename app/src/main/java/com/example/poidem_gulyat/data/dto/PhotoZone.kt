@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey
     tableName = "photoZones",
 )
 data class PhotoZone(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = 0,
     val name:String,
     val latitude: Double,
     val longitude: Double,
@@ -19,8 +21,6 @@ data class PhotoZone(
     val endWork:Float?,
     @ColumnInfo(defaultValue = "0.0")
     val rating: Double
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = 0
-}
+)
+
 

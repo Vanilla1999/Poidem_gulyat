@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey
     tableName = "userPoints",
 )
 data class UserPoint(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = 0,
     val name:String,
     val latitude: Double,
     val longitude: Double,
@@ -19,8 +21,5 @@ data class UserPoint(
     val endWork:Float?,
     @ColumnInfo(defaultValue = "0.0")
     val rating: Double
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = 0
-}
+)
 
