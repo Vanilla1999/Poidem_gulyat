@@ -3,15 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/zavad/.gradle/caches/transforms-3/269b7375d09f1b3c9fd262f4dc1a82a3/transformed/jetified-osmdroid-android-6.1.10/res/layout/bonuspack_bubble.xml" value="0.303125" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/bg_button_primary.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/buttonshapewhitebg.xml" value="0.2859375" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/dop_back.xml" value="0.3065" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/dop_info_line.xml" value="0.3065" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/ic_baseline_account_balance_24.xml" value="0.3085" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/ic_baseline_emoji_people_24.xml" value="0.252" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/ic_baseline_local_atm_24.xml" value="0.252" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.231" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/ic_email_white_24dp.xml" value="0.2859375" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.3335" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/drawable/kek12.xml" value="0.2859375" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/activity_auth.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/activity_fullscreen.xml" value="0.23854166666666668" />
-        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/activity_splash.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/dop_info.xml" value="0.1" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/dop_info_home.xml" value="0.25" />
+        <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/dop_info_img.xml" value="0.24882428388200087" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/fragment_dashboard.xml" value="0.3484375" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/zavad/AndroidStudioProjects/Poidem_gulyat/app/src/main/res/layout/fragment_login.xml" value="0.22" />

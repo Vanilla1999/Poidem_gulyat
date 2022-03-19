@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/dop_memu"
+    android:id="@+id/dopInfoHome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08978675" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="50dp"
+        android:layout_height="5dp"
+        android:background="@drawable/dop_info_line"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></View>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Магнит"
+        android:textSize="25dp"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal" />
+
+    <RatingBar
+        android:id="@+id/rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:numStars="5"
+        android:rating="2.5"
+        android:theme="@style/RatingBar"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/workTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Открыто до 20:00"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/rating" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:singleLine="false"
+        android:text="тело, обладающее собственным магнитным полем. Возможно, слово происходит от др.-греч. Μαγνῆτις λίθος (Magnētis líthos), «камень из Магнесии» — от названия региона Магнисия и древнего города Магнисия в Малой Азии[1][2], где в древности были открыты залежи магнетита.[3]
+
+Простейшим и самым маленьким магнитом можно считать электрон. Магнитные свойства всех остальных магнитов обусловлены магнитными моментами электронов внутри них. С точки зрения квантовой теории поля электромагнитное взаимодействие переносится безмассовым бозоном — фотоном (частицей, которую можно представить как квантовое возбуждение электромагнитного поля)."
+        android:textSize="15dp"
+
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/workTimeTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

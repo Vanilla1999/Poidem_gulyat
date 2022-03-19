@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.poidem_gulyat"
-        minSdk 21
+        minSdk 25
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -47,7 +47,7 @@ android {
 dependencies {
 
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -84,5 +84,7 @@ dependencies {
     implementation "androidx.biometric:biometric-ktx:1.2.0-alpha04"
     // openStreetMap
     implementation 'org.osmdroid:osmdroid-android:6.1.10'
+    // rating bar
+    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
 
 }

@@ -6,9 +6,11 @@ import androidx.room.PrimaryKey
 
 
 @Entity(
-    tableName = "attractions",
+    tableName = "attractions"
 )
 data class Attraction(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val name:String,
     val latitude: Double,
     val longitude: Double,
@@ -19,8 +21,5 @@ data class Attraction(
     val endWork:Float?,
     @ColumnInfo(defaultValue = "0.0")
     val rating: Double
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = 0
-}
+)
 

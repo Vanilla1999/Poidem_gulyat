@@ -1,5 +1,6 @@
 package com.example.poidem_gulyat.data.source.database.dao
 
+import android.util.Log
 import androidx.room.*
 
 @Dao
@@ -15,7 +16,7 @@ abstract class BaseDao<T> {
     abstract fun update(item: T)
 
     @Update
-    abstract fun update(list: List<T>)
+    abstract fun update(list: List<T>): Int
 
     @Delete
     abstract fun delete(item: T)
@@ -37,7 +38,10 @@ abstract class BaseDao<T> {
         for (i in insertResult.indices) {
             if (insertResult[i] == -1L) updateList.add(list[i])
         }
-
-        if (!updateList.isEmpty()) update(updateList)
+        var a = 0
+        if (!updateList.isEmpty())
+            a = update(updateList)
+        Log.d("sdf", a.toString())
     }
+
 }

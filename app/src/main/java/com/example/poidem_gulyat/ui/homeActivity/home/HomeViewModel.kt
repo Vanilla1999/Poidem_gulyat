@@ -22,7 +22,7 @@ class HomeViewModel(
 ) : ViewModel() {
 
 
-    val _buttonsState:MutableStateFlow<ResponseHome> =  MutableStateFlow(
+    private val _buttonsState:MutableStateFlow<ResponseHome> =  MutableStateFlow(
         ResponseHome.Loading)
     val buttonStateFlow :StateFlow<ResponseHome> = _buttonsState.asStateFlow()
 
@@ -40,9 +40,40 @@ class HomeViewModel(
 
     fun attractionButtonClick(){
         viewModelScope.launch {
-            _buttonsState.emit(ResponseHome.Attraction)
-            markerManager.locationFlow.emit(ResponseHome.Attraction)
-            Log.d("attractionButtonClick", "Attraction")
+            if (_buttonsState.value == ResponseHome.Attraction) {
+                _buttonsState.emit(ResponseHome.Loading)
+                markerManager.locationFlow.emit(ResponseHome.Loading)
+            } else {
+                _buttonsState.emit(ResponseHome.Attraction)
+                markerManager.locationFlow.emit(ResponseHome.Attraction)
+                Log.d("attractionButtonClick", "Attraction")
+            }
+        }
+    }
+
+    fun photoZoneButtonClick(){
+        viewModelScope.launch {
+            if (_buttonsState.value == ResponseHome.PhotoZone) {
+                _buttonsState.emit(ResponseHome.Loading)
+                markerManager.locationFlow.emit(ResponseHome.Loading)
+            } else {
+                _buttonsState.emit(ResponseHome.PhotoZone)
+                markerManager.locationFlow.emit(ResponseHome.PhotoZone)
+                Log.d("attractionButtonClick", "Attraction")
+            }
+        }
+    }
+
+     fun userPointButtonClick(){
+        viewModelScope.launch {
+            if (_buttonsState.value == ResponseHome.UserPoint) {
+                _buttonsState.emit(ResponseHome.Loading)
+                markerManager.locationFlow.emit(ResponseHome.Loading)
+            } else {
+                _buttonsState.emit(ResponseHome.UserPoint)
+                markerManager.locationFlow.emit(ResponseHome.UserPoint)
+                Log.d("attractionButtonClick", "Attraction")
+            }
         }
     }
     override fun onCleared() {

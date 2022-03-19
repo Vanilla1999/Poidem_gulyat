@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -76,6 +78,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         binding.attractionButton.setOnClickListener {
             viewModelHome.attractionButtonClick()
         }
+        binding.userPointButton.setOnClickListener {
+            viewModelHome.userPointButtonClick()
+        }
+        binding.photoZoneButton.setOnClickListener {
+            viewModelHome.photoZoneButtonClick()
+        }
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModelHome.buttonStateFlow.collect {
                 when (it) {
@@ -83,14 +91,60 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                         binding.userPointButton.hide()
                         binding.photoZoneButton.hide()
                     }
-                    else -> {}
+                    ResponseHome.UserPoint ->{
+                        binding.photoZoneButton.hide()
+                        binding.attractionButton.hide()
+                    }
+                    ResponseHome.PhotoZone ->{
+                        binding.userPointButton.hide()
+                        binding.attractionButton.hide()
+                    }
+                    ResponseHome.Loading->{
+                        Log.d("kek", " показываем все")
+                        withContext(Dispatchers.Main) {
+                            binding.userPointButton.show()
+                            binding.photoZoneButton.show()
+                            binding.attractionButton.show()
+                        }
+                    }
                 }
             }
         }
-        binding.kek.setOnTouchListener { _, _ ->
-            Log.d("HomeFragment", "onTouch")
-            false
-        }
+//       // binding.fragmentHome.transitionToEnd()
+//        binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
+//        binding.dopInfoHomeMain.dopInfo.setTransitionListener(object : MotionLayout.TransitionListener {
+//            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+//                binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
+//                Log.d("kek", "onTransitionCompleted")
+//            }
+//
+//            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+//                Log.d("kek", "onTransitionTrigger")
+//            }
+//
+//            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+//                Log.d("kek", "onTransitionStarted")
+//            }
+//
+//            override fun onTransitionChange(
+//                motionLayout: MotionLayout?,
+//                startId: Int,
+//                endId: Int,
+//                progress: Float
+//            ) {
+//                Log.d("kek", "onTransitionChange")
+//            }
+//        })
+//        binding.fragmentHome.setOnTouchListener { _, _ ->
+//            binding.dopInfoHomeMain.dopInfoHome.dopInfoHome.setOnTouchListener { _, event ->
+//                when(event.action){
+//                    MotionEvent.ACTION_UP ->binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
+//                    MotionEvent.ACTION_DOWN ->binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = true
+//                }
+//                true
+//            }
+//            false
+//        }
     }
 
     private fun initFlow() {

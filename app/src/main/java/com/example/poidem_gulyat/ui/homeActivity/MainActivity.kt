@@ -1,5 +1,6 @@
 package com.example.poidem_gulyat.ui.homeActivity
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.graphics.Color
@@ -7,45 +8,39 @@ import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
-import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import com.example.poidem_gulyat.R
-import com.example.poidem_gulyat.databinding.ActivityMainBinding
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
-import android.view.ViewGroup
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.poidem_gulyat.App.Companion.appComponentMain
+import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.customView.geo.CustomMe
 import com.example.poidem_gulyat.data.ErrorApp
 import com.example.poidem_gulyat.data.ResponseDataBase
-import com.example.poidem_gulyat.data.ResponseHome
 import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.data.dto.Attraction
 import com.example.poidem_gulyat.data.dto.PhotoZone
 import com.example.poidem_gulyat.data.dto.UserPoint
+import com.example.poidem_gulyat.databinding.ActivityMainBinding
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerMainActvitityComponent
 import com.example.poidem_gulyat.di.mainActivtiy.MainActvitityComponent
 import com.example.poidem_gulyat.services.LocationService
-import com.example.poidem_gulyat.ui.homeActivity.home.FactoryHomeView
-import com.example.poidem_gulyat.ui.homeActivity.home.HomeViewModel
 import com.example.poidem_gulyat.utils.BaseActivity
 import com.example.poidem_gulyat.utils.tryCast
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -68,6 +63,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         get() = job + Dispatchers.IO
     private lateinit var mapController: IMapController
     private var context: MainActivity? = null
+    private lateinit var toast :Toast
     override fun onAfterRequestPermission() {
         //  TODO("Not yet implemented")
     }
@@ -90,6 +86,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         setWindowTransparency { _, navigationBarSize ->
             navView.setPadding(0, 0, 0, navigationBarSize)
         }
+        toast =Toast.makeText(this, "", Toast.LENGTH_LONG)
         initMap()
         initFlowDatabase()
         intiFlowError()
@@ -108,9 +105,12 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         binding.map.overlays.add(rotationGestureOverlay);
     }
 
+
     private fun initFlowMylocation() {
         locationUpdatesJob = lifecycleScope.launch {
+            println("initFlowMylocation      : I'm working in thread ${Thread.currentThread().name}")
             viewModelMain.locationFlow!!.collect {
+                println("initFlowMylocation      : I'm working in thread ${Thread.currentThread().name}")
                 when (it) {
                     is ResponseSplash.Success -> {
                         val location = (it.value as Location)
@@ -130,18 +130,24 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         }
     }
 
-    private fun intiFlowError(){
+    private fun intiFlowError() {
         lifecycleScope.launchWhenResumed {
+            println("intiFlowError      : I'm working in thread ${Thread.currentThread().name}")
             viewModelMain.sharedStateFlowError.collect {
-                when(it){
-                    is ErrorApp.FailureDataBase ->{ Toast.makeText(context,
-                        it.value.toString(),
-                        Toast.LENGTH_LONG)
-                        .show()}
-                    is ErrorApp.FailureUnknown ->{ Toast.makeText(context,
-                        it.value.toString(),
-                        Toast.LENGTH_LONG)
-                        .show()}
+                println("intiFlowError      : I'm working in thread ${Thread.currentThread().name}")
+                when (it) {
+                    is ErrorApp.FailureDataBase -> {
+                        Toast.makeText(context,
+                            it.value.toString(),
+                            Toast.LENGTH_LONG)
+                            .show()
+                    }
+                    is ErrorApp.FailureUnknown -> {
+                        Toast.makeText(context,
+                            it.value.toString(),
+                            Toast.LENGTH_LONG)
+                            .show()
+                    }
                 }
             }
         }
@@ -149,7 +155,9 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
 
     private fun initFlowDatabase() {
         lifecycleScope.launchWhenResumed {
-            viewModelMain.responseDataBaseAttracitonStateFlow.collect {
+            println("initFlowDatabase      : I'm working in thread ${Thread.currentThread().name}")
+            viewModelMain.responseDataBaseStateFlow.collect {
+                println("initFlowDatabase      : I'm working in thread ${Thread.currentThread().name}")
                 when (it) {
                     is ResponseDataBase.Success -> {
                         ifSuccess(it.value)
@@ -166,36 +174,86 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
                             Toast.LENGTH_LONG)
                             .show()
                     }
-                    is ResponseDataBase.Clear -> {}
+                    is ResponseDataBase.Clear -> {
+                        clearMarkers()
+                    }
                 }
             }
         }
     }
 
-
     private fun ifSuccess(it: Any?) {
-        it.tryCast<List<Attraction>> {
-            Toast.makeText(context,
-                "Данные есть Attraction   $this",
-                Toast.LENGTH_LONG)
-                .show()
+        val a = it as? List<*>
+        a?.get(0).tryCast<Attraction> {
+            paintAttraction(it as List<Attraction>)
+            toast.setText("Отображение достопримечательностей")
+            toast.show()
         }
-        it.tryCast<List<PhotoZone>> {
-            Toast.makeText(context,
-                "Данные есть PhotoZone",
-                Toast.LENGTH_LONG)
-                .show()
+        a?.get(0).tryCast<PhotoZone> {
+            paintPhotoZone(it as List<PhotoZone>)
+            toast.setText("Отображение фото-студий/фото-зон")
+            toast.show()
         }
-        it.tryCast<List<UserPoint>> {
-            Toast.makeText(context,
-                "Данные есть UserPoint",
-                Toast.LENGTH_LONG)
-                .show()
+        a?.get(0).tryCast<UserPoint> {
+            paintUserPoint(it as List<UserPoint>)
+            toast.setText("Отображение мест от пользователей")
+            toast.show()
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun paintAttraction(listAttraction: List<Attraction>) {
+        listAttraction.forEach {
+            val startPoint = GeoPoint(it.latitude, it.longitude)
+            val startMarker = Marker(binding.map)
+           // val infoWindow = InfoWindow(R.layout.bonuspack_bubble,binding.map)
+            startMarker.position = startPoint
+            startMarker.setInfoWindow(null)
+            startMarker.setOnMarkerClickListener { marker, mapView ->
+               mapView.controller.animateTo(marker.position)
+                return@setOnMarkerClickListener true
+            }
+          //  startMarker.setInfoWindow()
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            startMarker.icon = this.getDrawable(R.drawable.ic_baseline_account_balance_24)
+            binding.map.overlays.add(startMarker)
+        }
+        binding.map.invalidate()
+    }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun paintPhotoZone(listPhotoZone: List<PhotoZone>) {
+        listPhotoZone.forEach {
+            val startPoint = GeoPoint(it.latitude, it.longitude)
+            val startMarker = Marker(binding.map)
+            startMarker.position = startPoint
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            startMarker.icon = this.getDrawable(R.drawable.ic_baseline_photo_camera_24)
+            binding.map.overlays.add(startMarker)
+        }
+        binding.map.invalidate()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun paintUserPoint(listUserPoint: List<UserPoint>) {
+        listUserPoint.forEach {
+            val startPoint = GeoPoint(it.latitude, it.longitude)
+            val startMarker = Marker(binding.map)
+            startMarker.position = startPoint
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            startMarker.icon = this.getDrawable(R.drawable.ic_baseline_emoji_people_24)
+            binding.map.overlays.add(startMarker)
+        }
+        binding.map.invalidate()
+    }
+
+    private fun clearMarkers() {
+        binding.map.overlays.forEachIndexed { index, overlay ->
+            if (index > 1) {
+                binding.map.overlays.remove(overlay)
+                binding.map.invalidate()
+            }
+        }
     }
 
     override fun onPause() {

@@ -25,6 +25,7 @@ sealed class ResponseHome {
     object PhotoZone : ResponseHome()
     object Loading : ResponseHome()
     object UserPoint : ResponseHome()
+    object Non : ResponseHome()
 }
 
 sealed class ResponseDataBase<out T> {
@@ -35,6 +36,7 @@ sealed class ResponseDataBase<out T> {
 
     object Empty : ResponseDataBase<Nothing>()
     object Clear : ResponseDataBase<Nothing>()
+    object Non : ResponseDataBase<Nothing>()
 //    companion object {
 //        inline fun <T> on(f: () -> T): ResponseDataBase<T> = try {
 //            Success(f())

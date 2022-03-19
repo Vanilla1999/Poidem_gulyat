@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000"
     android:fitsSystemWindows="true"
-    android:id="@+id/kek"
+    app:layoutDescription="@xml/fragment_home_scene"
     tools:context=".ui.homeActivity.home.HomeFragment">
 
     <!--    <View-->
@@ -18,25 +19,25 @@
     <!--    </View>-->
 
 
-<!--    <org.osmdroid.views.MapView-->
-<!--        android:id="@+id/map"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:visibility="invisible"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.0" />-->
+    <!--    <org.osmdroid.views.MapView-->
+    <!--        android:id="@+id/map"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:visibility="invisible"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.0"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0.0" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/userPointButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         android:src="@drawable/ic_baseline_emoji_people_24"
-        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/photoZoneButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical">
@@ -47,22 +48,23 @@
         android:id="@+id/photoZoneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_local_atm_24"
         android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_photo_camera_24"
         app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical">
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/attractionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:src="@drawable/ic_baseline_location_city_24"
+        android:src="@drawable/ic_baseline_account_balance_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal">
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"
         android:layout_width="wrap_content"
@@ -75,10 +77,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.50" />
+        app:layout_constraintGuide_percent="0.25" />
+
+<!--    <include-->
+<!--        android:id="@+id/dopInfoHomeMain"-->
+<!--        layout="@layout/dop_info"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="1000dp"-->
+<!--        android:clickable="false"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

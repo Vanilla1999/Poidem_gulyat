@@ -1,5 +1,6 @@
 package com.example.poidem_gulyat.data.repository.markers
 
+import com.example.poidem_gulyat.data.ResponseDataBase
 import com.example.poidem_gulyat.data.dto.UserLocation
 import com.example.poidem_gulyat.data.dto.UserPoint
 import kotlinx.coroutines.Deferred
@@ -15,9 +16,9 @@ interface MainRepo <T>{
 
 interface UserPointRepository :MainRepo<UserPoint> {
 
-    suspend fun getAllUserPointsSuitRating(rating:Double): Flow<List<UserPoint>>
+    suspend fun getAllUserPointsSuitRating(rating:Double): Flow<ResponseDataBase<Any?>>
 
-    suspend fun getAllUserPoints(): Flow<List<UserPoint>>
+    suspend fun getAllUserPoints(): Flow<ResponseDataBase<Any?>>
 
 }
 
