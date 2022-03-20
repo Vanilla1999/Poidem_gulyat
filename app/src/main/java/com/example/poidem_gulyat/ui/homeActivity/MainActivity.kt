@@ -31,6 +31,7 @@ import com.example.poidem_gulyat.databinding.ActivityMainBinding
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerMainActvitityComponent
 import com.example.poidem_gulyat.di.mainActivtiy.MainActvitityComponent
 import com.example.poidem_gulyat.services.LocationService
+import com.example.poidem_gulyat.ui.homeActivity.home.HomeFragment
 import com.example.poidem_gulyat.utils.BaseActivity
 import com.example.poidem_gulyat.utils.tryCast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -206,20 +207,17 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
     private fun clickListener(marker: Marker,mapView: MapView,type:Any):OnMarkerClickListener{
         type.tryCast<Attraction> { return  OnMarkerClickListener { _, _ ->
             mapView.controller.animateTo(marker.position)
-            toast.setText("Отображение достопримечательностей")
-            toast.show()
+            viewModelMain.clickOnMarker(type)
             true
         } }
         type.tryCast<PhotoZone> { return  OnMarkerClickListener { _, _ ->
             mapView.controller.animateTo(marker.position)
-            toast.setText("Отображение фото-студий/фото-зон")
-            toast.show()
+            viewModelMain.clickOnMarker(type)
             true
         } }
         type.tryCast<UserPoint> { return  OnMarkerClickListener { _, _ ->
             mapView.controller.animateTo(marker.position)
-            toast.setText("Отображение мест от пользователей")
-            toast.show()
+            viewModelMain.clickOnMarker(type)
             true
         } }
         return  OnMarkerClickListener { _, _ ->
@@ -355,6 +353,18 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         locationService = null
         viewModelMain.locationFlow = null
     }
+
+    override fun onBackPressed() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main)
+        viewModelMain.clickOnMarker(null)
+        (navHostFragment!!.childFragmentManager.primaryNavigationFragment as? OnBackPressedFrament)?.onBack()?.let {
+            if(!it)
+            super.onBackPressed()
+        }
+    }
+}
+interface OnBackPressedFrament{
+    fun onBack():Boolean
 }
 typealias OnSystemInsetsChangedListener =
             (statusBarSize: Int, navigationBarSize: Int) -> Unit

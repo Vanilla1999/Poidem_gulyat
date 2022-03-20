@@ -21,12 +21,15 @@ class HomeViewModel(
     private val markerManager: MarkerManager
 ) : ViewModel() {
 
+    val markerSharedFlow = markerManager.markerFlow.asSharedFlow()
 
     private val _buttonsState:MutableStateFlow<ResponseHome> =  MutableStateFlow(
         ResponseHome.Loading)
     val buttonStateFlow :StateFlow<ResponseHome> = _buttonsState.asStateFlow()
 
     var locationFlow: StateFlow<ResponseSplash<Any?>>? = null
+
+    var markerTouch :Boolean = false
 
     suspend fun getLastLocation() = flow<ResponseSplash<Location?>> {
         gpsRepository.getLastKnownLocation().collect {

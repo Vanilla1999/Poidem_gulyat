@@ -14,4 +14,5 @@ data class MarkerManager constructor(
     val userPointRepository: UserPointRepository,
 ) {
     val locationFlow: MutableStateFlow<ResponseHome> = MutableStateFlow(ResponseHome.Non)
+    val markerFlow: MutableSharedFlow<Any?> = MutableSharedFlow(replay = 1, extraBufferCapacity = 0,BufferOverflow.DROP_OLDEST)
 }

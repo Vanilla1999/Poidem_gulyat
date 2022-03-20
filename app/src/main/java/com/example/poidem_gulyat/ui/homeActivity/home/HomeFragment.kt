@@ -3,10 +3,8 @@ package com.example.poidem_gulyat.ui.homeActivity.home
 import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
-import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -15,28 +13,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.poidem_gulyat.App
 import com.example.poidem_gulyat.R
-import com.example.poidem_gulyat.customView.geo.CustomMe
 import com.example.poidem_gulyat.data.ResponseHome
-import com.example.poidem_gulyat.data.ResponseSplash
+import com.example.poidem_gulyat.data.dto.Attraction
+import com.example.poidem_gulyat.data.dto.PhotoZone
+import com.example.poidem_gulyat.data.dto.UserPoint
 import com.example.poidem_gulyat.databinding.FragmentHomeBinding
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerHomeFragmentComponent
 import com.example.poidem_gulyat.di.mainActivtiy.HomeFragmentComponent
 import com.example.poidem_gulyat.services.LocationService
 import com.example.poidem_gulyat.ui.homeActivity.MainActivity
+import com.example.poidem_gulyat.ui.homeActivity.OnBackPressedFrament
+import com.example.poidem_gulyat.utils.tryCast
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.osmdroid.api.IMapController
-import org.osmdroid.config.Configuration.*
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, CoroutineScope {
+
+class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, CoroutineScope,
+    OnBackPressedFrament {
 
     private val job: Job = SupervisorJob()
     override val coroutineContext: CoroutineContext
@@ -91,15 +89,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                         binding.userPointButton.hide()
                         binding.photoZoneButton.hide()
                     }
-                    ResponseHome.UserPoint ->{
+                    ResponseHome.UserPoint -> {
                         binding.photoZoneButton.hide()
                         binding.attractionButton.hide()
                     }
-                    ResponseHome.PhotoZone ->{
+                    ResponseHome.PhotoZone -> {
                         binding.userPointButton.hide()
                         binding.attractionButton.hide()
                     }
-                    ResponseHome.Loading->{
+                    ResponseHome.Loading -> {
                         Log.d("kek", " показываем все")
                         withContext(Dispatchers.Main) {
                             binding.userPointButton.show()
@@ -110,9 +108,10 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                 }
             }
         }
-       // binding.motionBase.transitionToEnd()
+        // binding.motionBase.transitionToEnd()
         binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
-        binding.dopInfoHomeMain.dopInfo.setTransitionListener(object : MotionLayout.TransitionListener {
+        binding.dopInfoHomeMain.dopInfo.setTransitionListener(object :
+            MotionLayout.TransitionListener {
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
                 binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
                 Log.d("kek", "onTransitionCompleted")
@@ -130,23 +129,23 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
                 motionLayout: MotionLayout?,
                 startId: Int,
                 endId: Int,
-                progress: Float
+                progress: Float,
             ) {
                 Log.d("kek", "onTransitionChange")
             }
         })
         binding.dopInfoHomeMain.dopInfoHome.dopInfoHome.setOnTouchListener { _, event ->
-            when(event.action){
-                MotionEvent.ACTION_UP ->{
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
                     binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = false
                     Log.d("kek", "ACTION_UP")
                 }
-                MotionEvent.ACTION_DOWN ->{
+                MotionEvent.ACTION_DOWN -> {
                     binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = true
                     binding.dopInfoHomeMain.dopInfo.dispatchTouchEvent(event)
                     Log.d("kek", "ACTION_DOWN")
                 }
-                MotionEvent.ACTION_HOVER_MOVE ->{
+                MotionEvent.ACTION_HOVER_MOVE -> {
                     binding.dopInfoHomeMain.dopInfo.isInteractionEnabled = true
                     binding.dopInfoHomeMain.dopInfo.dispatchTouchEvent(event)
                     Log.d("kek", "ACTION_HOVER_MOVE")
@@ -157,26 +156,83 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         binding.fragmentHome.setOnTouchListener { _, _ ->
             false
         }
+        initFlow()
     }
 
+    private fun atStartOfDay(date: Date): Date {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar[Calendar.HOUR_OF_DAY] = 0
+        calendar[Calendar.MINUTE] = 0
+        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.MILLISECOND] = 0
+        return calendar.time
+    }
+
+
     private fun initFlow() {
-        locationUpdatesJob = lifecycleScope.launch {
-            viewModelHome.locationFlow!!.collect {
-                when (it) {
-                    is ResponseSplash.Success -> {
-                        val location = (it.value as Location)
-                        if (firstOpen) {
-//                            mapController.setZoom(15.0)
-//                            mapController.animateTo(GeoPoint(location.latitude, location.longitude))
-                            firstOpen = false
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModelHome.markerSharedFlow.collect {
+                it?.let {
+                    viewModelHome.markerTouch=true
+                    binding.motionBase.transitionToEnd()
+                    it.tryCast<Attraction> {
+                        val attraction = it as Attraction
+                        binding.dopInfoHomeMain.dopInfoHome.nameTextView.text = attraction.name
+                        binding.dopInfoHomeMain.dopInfoHome.rating.rating =
+                            attraction.rating ?: 0.0f
+                        binding.dopInfoHomeMain.dopInfoHome.descriptionTextView.text =
+                            attraction.description
+                        attraction.endWork?.let {
+                            val currentDate = Date(System.currentTimeMillis())
+                            val timeToClose = atStartOfDay(currentDate).time + attraction.endWork
+                            binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                                if (timeToClose > currentDate.time) getString(R.string.works_pattern,
+                                    attraction.endWork)
+                                else getString(R.string.close)
+                        } ?: run {
+                            binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                                getString(R.string.time_not_specified)
                         }
-                        Log.d("kek", (it.value as Location).latitude.toString())
-                        //(binding.map.overlays[0] as CustomMe).setLocation(location)
-                        //binding.map.visibility = View.VISIBLE
                     }
-                    is ResponseSplash.Failure -> Log.d("kek", " что то случилось")
-                    else -> {}
-                }
+                    it.tryCast<PhotoZone> {
+                        val photoZone = it as PhotoZone
+                        binding.dopInfoHomeMain.dopInfoHome.nameTextView.text = photoZone.name
+                        binding.dopInfoHomeMain.dopInfoHome.rating.rating = photoZone.rating ?: 0.0f
+                        binding.dopInfoHomeMain.dopInfoHome.descriptionTextView.text =
+                            photoZone.description
+                        photoZone.endWork?.let {
+                            val currentDate = Date(System.currentTimeMillis())
+                            val timeToClose = atStartOfDay(currentDate).time + photoZone.endWork
+                            binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                                if (timeToClose > currentDate.time) getString(R.string.works_pattern,
+                                    photoZone.endWork)
+                                else getString(R.string.close)
+                        } ?: run {
+                            binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                                getString(R.string.time_not_specified)
+                        }
+                    }
+                    it.tryCast<UserPoint> {
+                        val userPoint = it as UserPoint
+                        binding.dopInfoHomeMain.dopInfoHome.nameTextView.text = userPoint.name
+                        binding.dopInfoHomeMain.dopInfoHome.rating.rating = userPoint.rating ?: 0.0f
+                        binding.dopInfoHomeMain.dopInfoHome.descriptionTextView.text =
+                            userPoint.description
+                        userPoint.endWork?.let {
+                            val currentDate = Date(System.currentTimeMillis())
+                            val timeToClose = atStartOfDay(currentDate).time + userPoint.endWork
+                            binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                                if (timeToClose > currentDate.time) getString(R.string.works_pattern,
+                                    userPoint.endWork)
+                                else getString(R.string.close)
+                        } ?: run {
+                            binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                                getString(R.string.time_not_specified)
+                        }
+                    }
+                }?:run {
+                    viewModelHome.markerTouch = false }
             }
         }
     }
@@ -221,5 +277,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), ServiceConnection, Corout
         locationService = null
         viewModelHome.locationFlow = null
     }
+
+    override fun onBack(): Boolean {
+        return if (viewModelHome.markerTouch) {
+            binding.dopInfoHomeMain.dopInfo.transitionToStart()
+            binding.motionBase.transitionToStart()
+            true
+        } else
+            false
+    }
+
 
 }

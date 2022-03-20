@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.poidem_gulyat.databinding.FragmentNotificationsBinding
+import com.example.poidem_gulyat.ui.homeActivity.OnBackPressedFrament
 
-class NotificationsFragment : Fragment() {
+class NotificationsFragment : Fragment(), OnBackPressedFrament {
 
     private lateinit var notificationsViewModel: NotificationsViewModel
     private var _binding: FragmentNotificationsBinding? = null
@@ -40,5 +41,9 @@ class NotificationsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onBack(): Boolean {
+        return false
     }
 }

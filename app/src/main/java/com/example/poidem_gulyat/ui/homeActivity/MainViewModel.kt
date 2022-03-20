@@ -45,7 +45,8 @@ class MainViewModel(
     val responseDataBaseStateFlow: StateFlow<ResponseDataBase<Any?>> =
         _responseDataBaseStateFlow.asStateFlow()
 
-    private val locationFlowToMain: StateFlow<ResponseHome> = markerManager.locationFlow.asStateFlow()
+    private val locationFlowToMain: StateFlow<ResponseHome> =
+        markerManager.locationFlow.asStateFlow()
 
     init {
         Log.d("MainViewModel", "Attraction")
@@ -84,45 +85,52 @@ class MainViewModel(
                     longitude = 38.97454,
                     img = null,
                     description = "Свято-Екатерининский кафедральный собор ",
-                    startWork = 2234234f,
-                    endWork = 2234234f,
-                    rating = 5.0),
+                    startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L,
+                    rating = 5.0f),
                 Attraction(name = "Войсковой собор святого Благоверного Князя Александра Невского",
                     latitude = 45.01436,
                     longitude = 38.96696,
                     img = null,
                     description = "Войсковой собор святого Благоверного Князя Александра Невского",
-                    startWork = 2234234f,
-                    endWork = 2234234f,
-                    rating = 5.0),
+                    startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L,
+                    rating = 5.0f),
                 Attraction(name = "Стадион “Краснодар”",
                     latitude = 45.04442,
                     longitude = 39.0293,
                     img = null,
                     description = "Стадион “Краснодар” ",
-                    startWork = 2234234f,
-                    endWork = 2234234f,
-                    rating = 5.0)
+                    startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L,
+                    rating = 5.0f)
             ))
         markerManager.photoZoneRepository.insertList(
             listOf(
-                PhotoZone(name ="EasyPhoto.Studio", latitude = 45.03215, longitude = 39.02482,
+                PhotoZone(name = "EasyPhoto.Studio", latitude = 45.03215, longitude = 39.02482,
                     img = null,
-                    description = "EasyPhoto.Studio ", startWork = 2234234f, endWork = 2234234f,
-                    rating = 5.0),
-                PhotoZone(name ="Alice", latitude = 45.06229, longitude = 38.99264, img = null,
-                    description = "Alice", startWork = 2234234f, endWork = 2234234f, rating = 5.0),
-                PhotoZone(name ="Белый осел", latitude = 45.06326, longitude = 38.99113, img = null,
-                    description = "Белый осел ", startWork = 2234234f, endWork = 2234234f,
-                    rating = 5.0)
+                    description = "EasyPhoto.Studio ",    startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L,
+                    rating = 5.0f),
+                PhotoZone(name = "Alice", latitude = 45.06229, longitude = 38.99264, img = null,
+                    description = "Alice", startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L, rating = 5.0f),
+                PhotoZone(name = "Белый осел",
+                    latitude = 45.06326,
+                    longitude = 38.99113,
+                    img = null,
+                    description = "Белый осел ",
+                    startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L,
+                    rating = 5.0f)
             )
         )
         markerManager.userPointRepository.insertList(
             listOf(
-                UserPoint(name ="Аллея на Московской", latitude = 45.06797,
+                UserPoint(name = "Аллея на Московской", latitude = 45.06797,
                     longitude = 39.01165, img = null,
-                    description = "Аллея на Московской ", startWork = 2234234f,
-                    endWork = 2234234f, rating = 5.0)
+                    description = "Аллея на Московской ",    startWork = 8 * 60 * 60 * 1000L,
+                    endWork = 18 * 60 * 60 * 1000L, rating = 5.0f)
             ))
     }
 
@@ -135,6 +143,13 @@ class MainViewModel(
             }
         }
     }
+
+    fun clickOnMarker(marker: Any?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            markerManager.markerFlow.emit(marker)
+        }
+    }
+
 
     private fun getUserPoint() {
         viewModelScope.launch(Dispatchers.IO) {

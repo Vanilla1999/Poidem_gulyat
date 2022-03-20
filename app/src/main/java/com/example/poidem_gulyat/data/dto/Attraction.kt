@@ -17,9 +17,9 @@ data class Attraction(
     val img: ByteArray?,
     @ColumnInfo(defaultValue = "нет информации")
     val description:String,
-    val startWork:Float?,
-    val endWork:Float?,
+    val startWork:Long?,
+    val endWork:Long?,
     @ColumnInfo(defaultValue = "0.0")
-    val rating: Double
+    val rating: Float?
 )
 

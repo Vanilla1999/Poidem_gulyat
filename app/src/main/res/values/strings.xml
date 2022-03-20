@@ -22,4 +22,9 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="register_now">Register Now</string>
     <string name="already_have_an_account_login_now">Already have an account? <b>Login Now</b></string>
+
+<!--   Time-->
+    <string name="works_pattern">работает до %d часов</string>
+    <string name="close">Закрыто</string>
+    <string name="time_not_specified">Закрыто</string>
 </resources>
