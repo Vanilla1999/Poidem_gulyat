@@ -29,32 +29,23 @@ sealed class ResponseHome {
 }
 
 sealed class ResponseDataBase<out T> {
-    data class Success<out T>(val value: T) : ResponseDataBase<T>()
+    data class Success<out T>(val value: List<T>) : ResponseDataBase<T>()
     data class Failure(
         val errorBody: Throwable,
     ) : ResponseDataBase<Nothing>()
 
     object Empty : ResponseDataBase<Nothing>()
-    object Clear : ResponseDataBase<Nothing>()
-    object Non : ResponseDataBase<Nothing>()
-//    companion object {
-//        inline fun <T> on(f: () -> T): ResponseDataBase<T> = try {
-//            Success(f())
-//        } catch (ex: Exception) {
-//            Failure(ex)
-//        }
-//
-//        inline fun <T, R, D> ResponseDataBase<T>.zip(
-//            success: (T) -> R,
-//            errorr: (Throwable) -> R,
-//            empty: () -> R,
-//        ): R =
-//            when (this) {
-//                is ResponseDataBase.Success -> success(this.value)
-//                is ResponseDataBase.Failure -> errorr(this.errorBody as Exception)
-//                is ResponseDataBase.Empty -> empty()
-//            }
-//    }
+}
+
+sealed class DataToMain<out T> {
+    data class Success<out T>(val value: Map<Int,List<T>>) : DataToMain<T>()
+    data class Failure(
+        val errorBody: Throwable,
+    ) : DataToMain<Nothing>()
+
+    object Empty : DataToMain<Nothing>()
+    object Clear : DataToMain<Nothing>()
+    object Non : DataToMain<Nothing>()
 }
 
 sealed class ErrorApp<out T> {

@@ -2,23 +2,16 @@ package com.example.poidem_gulyat.di.mainActivtiy
 
 import android.content.Context
 import com.example.poidem_gulyat.data.repository.hardware.GpsRepository
-import com.example.poidem_gulyat.data.repository.hardware.GpsRepositoryImpl
-import com.example.poidem_gulyat.data.repository.location.UserLocationRepository
-import com.example.poidem_gulyat.data.repository.location.UserLocationRepositoryImpl
 import com.example.poidem_gulyat.data.repository.markers.*
 import com.example.poidem_gulyat.data.source.gps.GpsDataSource
-import com.example.poidem_gulyat.data.source.gps.GpsDataSourceImpl
 import com.example.poidem_gulyat.di.ApplicationComponent
 import com.example.poidem_gulyat.di.ApplicationContext
 import com.example.poidem_gulyat.di.MainActivityScope
 import com.example.poidem_gulyat.ui.homeActivity.MainActivity
-import com.example.poidem_gulyat.ui.homeActivity.home.HomeFragment
-import com.example.poidem_gulyat.ui.login.LoginFragment
 import dagger.Binds
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Module
@@ -26,30 +19,19 @@ class MainModule {
     @Provides
     @MainActivityScope
     fun provideMarkerManager(
-         attractionRepository: AttractionRepository,
-         photoZoneRepository: PhotoZoneRepository,
-         userPointRepository: UserPointRepository
+         markerRepository: MarkerRepository
     ):MarkerManager{
-        return MarkerManager(attractionRepository, photoZoneRepository, userPointRepository)
+        return MarkerManager(markerRepository)
     }
 }
 
 @Module
 interface BindingModule {
-    @MainActivityScope
-    @Suppress("FunctionName")
-    @Binds
-    fun bindsAttractionRepository_to_AttractionRepositoryImpl(attractionRepositoryImpl: AttractionRepositoryImpl): AttractionRepository
 
     @MainActivityScope
     @Suppress("FunctionName")
     @Binds
-    fun bindsPhotoZoneRepository_to_PhotoZoneRepositoryImpl(photoZoneRepositoryImpl: PhotoZoneRepositoryImpl): PhotoZoneRepository
-
-    @MainActivityScope
-    @Suppress("FunctionName")
-    @Binds
-    fun bindsUserPointRepository_to_UserPointRepositoryImpl(userPointRepositoryImpl: UserPointRepositoryImpl): UserPointRepository
+    fun bindsMarkserRepository_to_MarkerRepositoryImpl(userPointRepositoryImpl: MarkerRepositoryImpl): MarkerRepository
 }
 
 @MainActivityScope
@@ -66,13 +48,7 @@ interface MainActvitityComponent {
     fun provideGpsSource(): GpsDataSource
 
     @Suppress("FunctionName")
-    fun bindsAttractionRepository_to_AttractionRepositoryImpl(): AttractionRepository
-
-    @Suppress("FunctionName")
-    fun bindsPhotoZoneRepository_to_PhotoZoneRepositoryImpl(): PhotoZoneRepository
-
-    @Suppress("FunctionName")
-    fun bindsUserPointRepository_to_UserPointRepositoryImpl(): UserPointRepository
+    fun bindsMarkserRepository_to_MarkerRepositoryImpl(): MarkerRepository
 
     @ApplicationContext
     fun getApplication(): Context

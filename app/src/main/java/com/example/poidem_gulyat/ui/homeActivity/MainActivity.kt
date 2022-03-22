@@ -8,6 +8,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
+import android.provider.ContactsContract
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
@@ -21,10 +22,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.poidem_gulyat.App.Companion.appComponentMain
 import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.customView.geo.CustomMe
+import com.example.poidem_gulyat.data.DataToMain
 import com.example.poidem_gulyat.data.ErrorApp
 import com.example.poidem_gulyat.data.ResponseDataBase
 import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.data.dto.Attraction
+import com.example.poidem_gulyat.data.dto.MarkerPoint
 import com.example.poidem_gulyat.data.dto.PhotoZone
 import com.example.poidem_gulyat.data.dto.UserPoint
 import com.example.poidem_gulyat.databinding.ActivityMainBinding
@@ -32,8 +35,7 @@ import com.example.poidem_gulyat.di.mainActivtiy.DaggerMainActvitityComponent
 import com.example.poidem_gulyat.di.mainActivtiy.MainActvitityComponent
 import com.example.poidem_gulyat.services.LocationService
 import com.example.poidem_gulyat.ui.homeActivity.home.HomeFragment
-import com.example.poidem_gulyat.utils.BaseActivity
-import com.example.poidem_gulyat.utils.tryCast
+import com.example.poidem_gulyat.utils.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -162,22 +164,22 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
             viewModelMain.responseDataBaseStateFlow.collect {
                 println("initFlowDatabase      : I'm working in thread ${Thread.currentThread().name}")
                 when (it) {
-                    is ResponseDataBase.Success -> {
+                    is DataToMain.Success -> {
                         ifSuccess(it.value)
                     }
-                    is ResponseDataBase.Failure -> {
+                    is DataToMain.Failure -> {
                         Toast.makeText(context,
                             "Ошибка выгрузки данных",
                             Toast.LENGTH_LONG)
                             .show()
                     }
-                    is ResponseDataBase.Empty -> {
+                    is DataToMain.Empty -> {
                         Toast.makeText(context,
                             "В базе данных пусто",
                             Toast.LENGTH_LONG)
                             .show()
                     }
-                    is ResponseDataBase.Clear -> {
+                    is DataToMain.Clear -> {
                         clearMarkers()
                     }
                 }
@@ -185,50 +187,39 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         }
     }
 
-    private fun ifSuccess(it: Any?) {
-        val a = it as? List<*>
-        a?.get(0).tryCast<Attraction> {
-            paintAttraction(it as List<Attraction>)
-            toast.setText("Отображение достопримечательностей")
-            toast.show()
-        }
-        a?.get(0).tryCast<PhotoZone> {
-            paintPhotoZone(it as List<PhotoZone>)
-            toast.setText("Отображение фото-студий/фото-зон")
-            toast.show()
-        }
-        a?.get(0).tryCast<UserPoint> {
-            paintUserPoint(it as List<UserPoint>)
-            toast.setText("Отображение мест от пользователей")
-            toast.show()
+    private fun ifSuccess(it: Map<Int,List<MarkerPoint>>) {
+        it.forEach { (type, value) ->
+            when(type){
+                attraction ->{
+                    paintAttraction(value)
+                    toast.setText("Отображение достопримечательностей")
+                    toast.show()
+                }
+                photoZone ->{
+                    paintPhotoZone(value)
+                    toast.setText("Отображение мест от пользователей")
+                    toast.show()
+                }
+                userPoint ->{
+                    paintUserPoint(value)
+                    toast.setText("Отображение фото-студий/фото-зон")
+                    toast.show()
+                }
+            }
         }
     }
 
-    private fun clickListener(marker: Marker,mapView: MapView,type:Any):OnMarkerClickListener{
-        type.tryCast<Attraction> { return  OnMarkerClickListener { _, _ ->
-            mapView.controller.animateTo(marker.position)
-            viewModelMain.clickOnMarker(type)
-            true
-        } }
-        type.tryCast<PhotoZone> { return  OnMarkerClickListener { _, _ ->
-            mapView.controller.animateTo(marker.position)
-            viewModelMain.clickOnMarker(type)
-            true
-        } }
-        type.tryCast<UserPoint> { return  OnMarkerClickListener { _, _ ->
-            mapView.controller.animateTo(marker.position)
-            viewModelMain.clickOnMarker(type)
-            true
-        } }
+    private fun clickListener(marker: Marker,mapView: MapView,type:MarkerPoint):OnMarkerClickListener{
         return  OnMarkerClickListener { _, _ ->
             mapView.controller.animateTo(marker.position)
+            viewModelMain.clickOnMarker(type)
             true
         }
     }
 
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun paintAttraction(listAttraction: List<Attraction>) {
+    private fun paintAttraction(listAttraction: List<MarkerPoint>) {
         listAttraction.forEach {
             val startPoint = GeoPoint(it.latitude, it.longitude)
             val startMarker = Marker(binding.map)
@@ -245,7 +236,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun paintPhotoZone(listPhotoZone: List<PhotoZone>) {
+    private fun paintPhotoZone(listPhotoZone: List<MarkerPoint>) {
         listPhotoZone.forEach {
             val startPoint = GeoPoint(it.latitude, it.longitude)
             val startMarker = Marker(binding.map)
@@ -259,7 +250,7 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun paintUserPoint(listUserPoint: List<UserPoint>) {
+    private fun paintUserPoint(listUserPoint: List<MarkerPoint>) {
         listUserPoint.forEach {
             val startPoint = GeoPoint(it.latitude, it.longitude)
             val startMarker = Marker(binding.map)

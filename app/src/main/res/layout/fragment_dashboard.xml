@@ -4,10 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    tools:context=".ui.homeActivity.dashboard.DashboardFragment"
+    android:clickable="false"
+    android:background="#00000000"
+    tools:context=".ui.homeActivity.dashboard.FilterFragment"
     android:focusable="true">
 
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/filter_motion_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="#00000000"
+        android:clickable="false"
+        app:layoutDescription="@xml/fragment_filter_scene"
+        >
+        <include
+            android:id="@+id/filterContainer"
+            layout="@layout/filter_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1000dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
     <TextView
         android:id="@+id/text_dashboard"
         android:layout_width="match_parent"
