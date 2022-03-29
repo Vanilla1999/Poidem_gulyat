@@ -8,9 +8,7 @@ import com.example.poidem_gulyat.data.dto.UserPoint
 import com.example.poidem_gulyat.data.source.database.DatabaseMain
 import com.otus.securehomework.data.repository.BaseRepositoryDataBase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class MarkerRepositoryImpl @Inject constructor(
@@ -40,6 +38,7 @@ class MarkerRepositoryImpl @Inject constructor(
         type: Int,
         rating: Double,
     ): Flow<ResponseDataBase<MarkerPoint>> {
+
         return  databaseSource.marker().getAllMarkersByTypeSuitRating(type ,rating).transform {
             doWork(it, this)
         }.flowOn(Dispatchers.IO)

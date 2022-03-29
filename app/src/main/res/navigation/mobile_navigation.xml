@@ -15,11 +15,25 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.poidem_gulyat.ui.homeActivity.dashboard.FilterFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_listFilterFragment"
+            app:destination="@id/listFilterFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.poidem_gulyat.ui.homeActivity.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/listFilterFragment"
+        android:name="com.example.poidem_gulyat.ui.homeActivity.dashboard.listFilter.ListFilterFragment"
+        android:label="fragment_list_filter"
+        tools:layout="@layout/fragment_list_filter" >
+        <action
+            android:id="@+id/action_listFilterFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard"
+            app:launchSingleTop="false" />
+    </fragment>
 </navigation>

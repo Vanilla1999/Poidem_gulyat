@@ -14,6 +14,7 @@ import com.example.poidem_gulyat.data.source.database.dao.*
     entities = [
         UserLocation::class,
         MarkerPoint::class,
+        Filter::class
     ],
     autoMigrations = [
     ],
@@ -22,6 +23,7 @@ import com.example.poidem_gulyat.data.source.database.dao.*
 abstract class DatabaseMain : RoomDatabase() {
     abstract fun userLocation(): UserLocationDao
     abstract fun marker(): MarkserDao
+    abstract fun filters(): FiltersDao
 
     companion object {
         val migrations: Array<Migration> = arrayOf(

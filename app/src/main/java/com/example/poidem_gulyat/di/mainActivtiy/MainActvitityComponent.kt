@@ -1,6 +1,8 @@
 package com.example.poidem_gulyat.di.mainActivtiy
 
 import android.content.Context
+import com.example.poidem_gulyat.data.repository.filter.FiltersRepository
+import com.example.poidem_gulyat.data.repository.filter.FiltersRepositoryImpl
 import com.example.poidem_gulyat.data.repository.hardware.GpsRepository
 import com.example.poidem_gulyat.data.repository.markers.*
 import com.example.poidem_gulyat.data.source.gps.GpsDataSource
@@ -32,6 +34,11 @@ interface BindingModule {
     @Suppress("FunctionName")
     @Binds
     fun bindsMarkserRepository_to_MarkerRepositoryImpl(userPointRepositoryImpl: MarkerRepositoryImpl): MarkerRepository
+
+    @MainActivityScope
+    @Suppress("FunctionName")
+    @Binds
+    fun bindsFilterRepository_to_FilterRepositoryImpl(filtersRepositoryImpl: FiltersRepositoryImpl): FiltersRepository
 }
 
 @MainActivityScope
@@ -49,6 +56,9 @@ interface MainActvitityComponent {
 
     @Suppress("FunctionName")
     fun bindsMarkserRepository_to_MarkerRepositoryImpl(): MarkerRepository
+
+    @Suppress("FunctionName")
+    fun bindsFilterRepository_to_FilterRepositoryImpl(): FiltersRepository
 
     @ApplicationContext
     fun getApplication(): Context

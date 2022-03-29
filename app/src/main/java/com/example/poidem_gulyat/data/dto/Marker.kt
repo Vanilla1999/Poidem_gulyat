@@ -21,6 +21,8 @@ data class MarkerPoint(
     val endWork:Long?,
     @ColumnInfo(defaultValue = "0.0")
     val rating: Float?,
+    val adress:String = "г Красноадр, ул. Кривой Рог, д.19",
+    val price:Int,
     val type:Int
 )
 

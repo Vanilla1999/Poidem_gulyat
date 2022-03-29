@@ -5,7 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-
+    <string name="common_error">Ошибка</string>
 
     <string name="retry">Retry</string>
     <string name="error_internet">Please check your internet connection</string>
@@ -23,8 +23,28 @@
     <string name="register_now">Register Now</string>
     <string name="already_have_an_account_login_now">Already have an account? <b>Login Now</b></string>
 
-<!--   Time-->
+    <!--   Time-->
     <string name="works_pattern">работает до %d часов</string>
     <string name="close">Закрыто</string>
     <string name="time_not_specified">Закрыто</string>
+    <!--   Edittext-->
+    <string name="serch_by_name">Поиск мест для фото</string>
+    <!--   RecyclerView-->
+    <string name="emty">Нет подходящих мест</string>
+
+    <!--   Filter-->
+    <string name="filter_fragment">Отфильтровать</string>
+    <string name="filter_sortBy">Отсортировать по</string>
+    <string name="filter_sortBy_rating">Рейтингу</string>
+    <string name="filter_sortBy_nearBy">Лучшее поблизости</string>
+    <string name="filter_type">Типы мест</string>
+    <string name="filter_type_attraction">Достопримичательность</string>
+    <string name="filter_type_photoZone">Фото-зона</string>
+    <string name="filter_type_userPoint">Места пользователей</string>
+    <string name="filter_availability">По доступности</string>
+    <string name="filter_availability_Platno">Платно</string>
+    <string name="filter_availability_free">Бесплатно</string>
+    <string name="filter_availability_open">Открыто</string>
+    <string name="filter_availability_close">Закрыто</string>
+    <string name="filter_rating">По рейтингу</string>
 </resources>

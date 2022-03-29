@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/filterLayout"
@@ -15,12 +15,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.08978675" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineHorizontal2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.14" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"
@@ -43,6 +38,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+
     <View
         android:id="@+id/view"
         android:layout_width="50dp"
@@ -59,9 +55,11 @@
         android:id="@+id/nameFilterTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:maxLines="1"
         android:text="Поиск по имени"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="20dp"
         app:autoSizeTextType="none"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical2"
@@ -74,6 +72,8 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:text="Фильтры"
+        android:background="@null"
+        android:textColor="@color/black"
         android:textAlignment="center"
         android:textSize="20dp"
         app:autoSizeTextType="none"
@@ -81,25 +81,44 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical2"
         app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal" />
 
-    <include
-        android:id="@+id/filterName"
-        layout="@layout/filter_serch_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal2" />
+<!--    <EditText-->
 
-    <include
-        android:id="@+id/filters"
-        layout="@layout/filter_serch_filters"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal2" />
-</androidx.constraintlayout.motion.widget.MotionLayout>
+<!--        android:id="@+id/filtersTextView2"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="694dp"-->
+<!--        android:maxLines="1"-->
+<!--        android:overScrollMode="always"-->
+<!--        android:scrollbarStyle="insideInset"-->
+<!--android:visibility="gone"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/guidelineVertical3"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal2"-->
+<!--        tools:text="Кроха - ekbwf rfr ltkf e ndltm" />-->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+
+<!--    <Button-->
+<!--        android:id="@+id/cancel2Button"-->
+<!--        style="@style/Widget.MaterialComponents.Button.Icon"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@drawable/dop_back_active"-->
+<!--        android:insetLeft="0dp"-->
+<!--        android:insetTop="0dp"-->
+<!--        android:insetRight="0dp"-->
+<!--        android:insetBottom="0dp"-->
+<!--        app:icon="@drawable/ic_baseline_search_24"-->
+<!--        app:iconGravity="textStart"-->
+<!--        app:iconPadding="0dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/guidelineVertical3"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal2"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/guidelineHorizontal3"-->
+<!--        />-->
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,4 +3,8 @@
         <attr name="fullscreenBackgroundColor" format="color" />
         <attr name="fullscreenTextColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="CustomTitleFilter">
+        <attr name="CustomTitleFilter_textSize" format="dimension" />
+        <attr name="CustomTitleFilter_text" format="string" />
+    </declare-styleable>
 </resources>

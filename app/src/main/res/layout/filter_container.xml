@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/filterContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="false"
     app:layoutDescription="@xml/filter_container_scene">
 
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08978675" />
+
+
     <include
         android:id="@+id/filterMain"
         layout="@layout/filter_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="1dp"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <include
+        android:id="@+id/filterContainer2"
+        layout="@layout/filter_serch_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterMain" />
 </androidx.constraintlayout.motion.widget.MotionLayout>

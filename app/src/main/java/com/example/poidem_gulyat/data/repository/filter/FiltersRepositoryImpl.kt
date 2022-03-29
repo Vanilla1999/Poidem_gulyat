@@ -1,0 +1,35 @@
+package com.example.poidem_gulyat.data.repository.filter
+
+import com.example.poidem_gulyat.data.ResponseDataBase
+import com.example.poidem_gulyat.data.dto.Filter
+import com.example.poidem_gulyat.data.dto.UserLocation
+import com.example.poidem_gulyat.data.source.database.DatabaseMain
+import com.otus.securehomework.data.repository.BaseRepositoryDataBase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.transform
+import javax.inject.Inject
+
+class FiltersRepositoryImpl @Inject constructor(
+    private val databaseSource: DatabaseMain
+):FiltersRepository, BaseRepositoryDataBase() {
+    override suspend fun getFilters(): Flow<ResponseDataBase<Filter>> {
+      return  databaseSource.filters().getFilter().transform {
+            doWork(it, this)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun insert(item: List<Filter>) {
+        databaseSource.filters().insertOrUpdate(item)
+    }
+
+    override suspend fun delete(list: List<Filter>) {
+        databaseSource.filters().delete(list)
+    }
+
+    override suspend fun delete() {
+        databaseSource.filters().nukeTable()
+    }
+
+}

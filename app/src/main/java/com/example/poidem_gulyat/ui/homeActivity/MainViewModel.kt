@@ -51,7 +51,7 @@ class MainViewModel(
         viewModelScope.launch(Dispatchers.IO + coroutineException) {
             try {
                 mockDatabase()
-            } catch (throwable: Exception) {
+            } catch (throwable: SQLiteException) {
                 _sharedStateFlowError.emit(ErrorApp.FailureDataBase(throwable.toString()))
             }
             locationFlowToMain.collect {
@@ -86,7 +86,7 @@ class MainViewModel(
                     startWork = 8 * 60 * 60 * 1000L,
                     endWork = 18 * 60 * 60 * 1000L,
                     rating = 5.0f,
-                    type = attraction),
+                    type = attraction, price = 0),
                 MarkerPoint(name = "Войсковой собор святого Благоверного Князя Александра Невского",
                     latitude = 45.01436,
                     longitude = 38.96696,
@@ -94,41 +94,8 @@ class MainViewModel(
                     description = "Войсковой собор святого Благоверного Князя Александра Невского",
                     startWork = 8 * 60 * 60 * 1000L,
                     endWork = 18 * 60 * 60 * 1000L,
-                    rating = 5.0f,
-                    type = attraction),
-                MarkerPoint(name = "Стадион “Краснодар”",
-                    latitude = 45.04442,
-                    longitude = 39.0293,
-                    img = null,
-                    description = "Стадион “Краснодар” ",
-                    startWork = 8 * 60 * 60 * 1000L,
-                    endWork = 18 * 60 * 60 * 1000L,
-                    rating = 5.0f,
-                    type = attraction),
-                MarkerPoint(name = "EasyPhoto.Studio", latitude = 45.03215, longitude = 39.02482,
-                    img = null,
-                    description = "EasyPhoto.Studio ", startWork = 8 * 60 * 60 * 1000L,
-                    endWork = 18 * 60 * 60 * 1000L,
-                    rating = 5.0f,
-                    type = photoZone),
-                MarkerPoint(name = "Alice", latitude = 45.06229, longitude = 38.99264, img = null,
-                    description = "Alice", startWork = 8 * 60 * 60 * 1000L,
-                    endWork = 18 * 60 * 60 * 1000L, rating = 5.0f,
-                    type = photoZone),
-                MarkerPoint(name = "Белый осел",
-                    latitude = 45.06326,
-                    longitude = 38.99113,
-                    img = null,
-                    description = "Белый осел ",
-                    startWork = 8 * 60 * 60 * 1000L,
-                    endWork = 15 * 60 * 60 * 1000L,
-                    rating = 5.0f,
-                    type = photoZone),
-                MarkerPoint(name = "Аллея на Московской", latitude = 45.06797,
-                    longitude = 39.01165, img = null,
-                    description = "Аллея на Московской ", startWork = 8 * 60 * 60 * 1000L,
-                    endWork = 18 * 60 * 60 * 1000L, rating = 5.0f,
-                    type = userPoint)
+                    rating = 4.0f,
+                    type = attraction, price = 1000)
             ))
     }
 
