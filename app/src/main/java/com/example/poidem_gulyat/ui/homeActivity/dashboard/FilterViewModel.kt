@@ -49,61 +49,36 @@ class FilterViewModel(
         onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val sharedStateFlowString = _sharedStateFlowString.asSharedFlow()
 
+    val markerSharedFlow = markerManager.markerFlow.asSharedFlow()
+    var markerTouch: Boolean = false
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
     }
     val text: LiveData<String> = _text
 
 
-    fun getAllMarkers() {
-        viewModelScope.launch(Dispatchers.IO + coroutineException) {
+    init {
+        getAllMarkers()
+    }
 
-            markerManager.markerRepository.getAllMarksers().collect { markerList ->
+    private fun getAllMarkers() {
+        viewModelScope.launch(Dispatchers.IO + coroutineException) {
+            markerManager.getAllMarkersWithFilter().collect { markerList ->
                 when (markerList) {
                     ResponseDataBase.Empty -> {
                         _sharedStateFlowDataBase.emit(ResponseDataBase.Empty)
                     }
                     is ResponseDataBase.Success -> {
+                        Log.d("getAllMarkers", "getAllMarkers")
                         var markerListThis = markerList.value
-                        filtersRepository.getFilters().collect { filterList ->
-                            when (filterList) {
-                                is ResponseDataBase.Success -> {
-                                    filterList.value.forEachIndexed { index, filter ->
-                                        when (index) {
-                                            0 -> {
-                                                if (filter.sortByRating == 1) {
-                                                    markerListThis = markerList.value.sortedByDescending  { it.rating }
-                                                }
-                                            }
-                                            1 -> {
-                                                if (filter.attraction == 1)
-                                                    markerListThis =
-                                                        markerList.value.filter { it.type == attraction }
-                                                if (filter.photoZone == 1)
-                                                    markerListThis =
-                                                        markerList.value.filter { it.type == photoZone }
-                                                if (filter.userPoint == 1)
-                                                    markerListThis =
-                                                        markerList.value.filter { it.type == userPoint }
-                                                _sharedStateFlowDataBase.emit(ResponseDataBase.Success(
-                                                    markerListThis))
-                                            }
-                                            2 -> {
-
-                                            }
-                                            3 -> {
-
-                                            }
-                                        }
-                                    }
-                                }
-                                else -> {}
-                            }
-                        }
+                        _sharedStateFlowDataBase.emit(ResponseDataBase.Success(
+                            markerListThis))
+                        markerManager.markerPointFromFilters.emit(markerListThis)
                     }
                     is ResponseDataBase.Failure -> {
                         _sharedStateFlowDataBase.emit(ResponseDataBase.Failure(markerList.errorBody))
                     }
+                    else -> {}
                 }
             }
         }
@@ -116,11 +91,8 @@ class FilterViewModel(
     }
 
     fun clearFilters() {
-        viewModelScope.launch(Dispatchers.IO  + coroutineException) {
-            filtersRepository.insert(
-                listOf(
-                    Filter(0), Filter(1), Filter(2), Filter(3)
-                ))
+        viewModelScope.launch(Dispatchers.IO + coroutineException) {
+            filtersRepository.delete()
         }
     }
 

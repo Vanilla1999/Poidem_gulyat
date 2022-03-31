@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.data.ResponseDataBase
@@ -25,6 +27,7 @@ import com.example.poidem_gulyat.ui.homeActivity.MainActivity
 import com.example.poidem_gulyat.ui.homeActivity.OnBackPressedFrament
 import com.example.poidem_gulyat.ui.homeActivity.dashboard.FactoryFilterView
 import com.example.poidem_gulyat.ui.homeActivity.dashboard.FilterAdapter
+import com.example.poidem_gulyat.ui.homeActivity.dashboard.FilterFragmentDirections
 import com.example.poidem_gulyat.ui.homeActivity.dashboard.FilterViewModel
 import com.example.poidem_gulyat.utils.GenericItemDiff
 import kotlinx.coroutines.CoroutineScope
@@ -42,12 +45,12 @@ class ListFilterFragment : Fragment(R.layout.fragment_list_filter), CoroutineSco
     private val job: Job = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-
+    private lateinit var navController: NavController
     private val binding: FragmentListFilterBinding by viewBinding()
 
     lateinit var listFilterComponent: ListFilterFragmentComponent
     private lateinit var adapter: ListFilterAdapter
-
+private lateinit  var mContext:Context
     @Inject
     lateinit var factory: FactoryListFilterView
     private val viewModelFilter by viewModels<ListFilterViewModel> { factory }
@@ -58,14 +61,31 @@ class ListFilterFragment : Fragment(R.layout.fragment_list_filter), CoroutineSco
         listFilterComponent =DaggerListFilterFragmentComponent.factory()
             .create((requireActivity() as MainActivity).activityComponent)
         listFilterComponent.inject(this)
+        mContext = context
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+        navController = findNavController()
         initListeners()
+        initView()
     }
 
+    fun initView(){
+        binding.customText1.setPaintBlackFull()
+        binding.customText2.setPaintBlackStroke()
+        binding.customText1.setlistener{
+            navController.popBackStack()
+        }
+        binding.customText2.setValues(mContext.getString(R.string.filter_list_delete))
+        binding.customText2.setlistener {viewModelFilter.changeFilter(Filter())}
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("ListFilterFragment","onDestroy")
+    }
     private fun initAdapter(){
         adapter = ListFilterAdapter {
             viewModelFilter.changeFilter(it)
@@ -80,8 +100,8 @@ class ListFilterFragment : Fragment(R.layout.fragment_list_filter), CoroutineSco
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModelFilter.sharedStateFlowDataBase.collect {
                 when(it){
-                    is ResponseDataBase.Success->{
-                        adapter.update(it.value,diffUtil)
+                    is ResponseDataBase.SuccessNotList->{
+                        adapter.setFilter(it.value)
                     }
                     is ResponseDataBase.Failure ->{
                         Toast.makeText(context,
@@ -90,42 +110,15 @@ class ListFilterFragment : Fragment(R.layout.fragment_list_filter), CoroutineSco
                             .show()
                     }
                     is ResponseDataBase.Empty ->{
-
+                        adapter.clear()
                     }
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModelFilter.stateFlowSizeMarkers.collect { binding.customText1.setValues(mContext.getString(R.string.filter_listview_result_size,it)) } }
     }
-    private val diffUtil = object : GenericItemDiff<Filter> {
-        override fun isSame(
-            oldItems: List<Filter>,
-            newItems: List<Filter>,
-            oldItemPosition: Int,
-            newItemPosition: Int,
-        ): Boolean {
-            val oldData = oldItems[oldItemPosition]
-            val newData = newItems[newItemPosition]
-            return oldData.id == newData.id
-        }
 
-        override fun isSameContent(
-            oldItems: List<Filter>,
-            newItems: List<Filter>,
-            oldItemPosition: Int,
-            newItemPosition: Int,
-        ): Boolean {
-            return oldItems[oldItemPosition].attraction == newItems[newItemPosition].attraction &&
-                    oldItems[oldItemPosition].bestNearby == newItems[newItemPosition].bestNearby &&
-                    oldItems[oldItemPosition].paid == newItems[newItemPosition].paid &&
-                    oldItems[oldItemPosition].photoZone == newItems[newItemPosition].photoZone &&
-                    oldItems[oldItemPosition].rating == newItems[newItemPosition].rating &&
-                    oldItems[oldItemPosition].userPoint == newItems[newItemPosition].userPoint &&
-                    oldItems[oldItemPosition].open == newItems[newItemPosition].open &&
-                    oldItems[oldItemPosition].close == newItems[newItemPosition].close &&
-                    oldItems[oldItemPosition].free == newItems[newItemPosition].free
-
-        }
-    }
 
     override fun onBack(): Boolean {
        return false

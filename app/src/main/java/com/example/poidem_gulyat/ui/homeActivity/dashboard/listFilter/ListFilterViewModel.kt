@@ -13,6 +13,7 @@ import com.example.poidem_gulyat.data.repository.markers.MarkerManager
 import com.example.poidem_gulyat.data.source.local.UserPreferences
 import com.example.poidem_gulyat.ui.homeActivity.home.HomeViewModel
 import com.example.poidem_gulyat.utils.attraction
+import com.example.poidem_gulyat.utils.empty
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListFilterViewModel(
-    private val filtersRepository: FiltersRepository
+    private val markerManager: MarkerManager,
 ) : ViewModel() {
     private val _sharedStateFlowError = MutableSharedFlow<ErrorApp<Any?>>(replay = 0,
         extraBufferCapacity = 1,
@@ -39,29 +40,40 @@ class ListFilterViewModel(
         extraBufferCapacity = 0,
         onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val sharedStateFlowDataBase = _sharedStateFlowDataBase.asSharedFlow()
+    private val _stateFlowSizeMarkers :MutableStateFlow<Int> = MutableStateFlow(0)
+    val stateFlowSizeMarkers =_stateFlowSizeMarkers.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO + coroutineException) {
-           // mockDatabase()
+            mockDatabase()
+        }
+        viewModelScope.launch(Dispatchers.IO + coroutineException) {
+          markerManager.getAllMarkersWithFilter().collect {
+              when(it){
+                  is ResponseDataBase.Empty ->{ _stateFlowSizeMarkers.emit(empty)}
+                  is ResponseDataBase.Success ->{_stateFlowSizeMarkers.emit(it.value.size) }
+                  is ResponseDataBase.Failure ->{_stateFlowSizeMarkers.emit(empty) }
+                  else -> {}
+              }
+          }
         }
     }
 
     private suspend fun mockDatabase() {
-        filtersRepository.insert(
-            listOf(
-                Filter(0),Filter(1),Filter(2),Filter(3)
-            ))
+        markerManager.filtersRepository.insertOrIgnore(
+            Filter()
+        )
     }
 
     fun getAllFilters() {
         viewModelScope.launch(Dispatchers.IO) {
-            filtersRepository.getFilters().collect {
+            markerManager.filtersRepository.getFilters().collect {
                 when (it) {
                     ResponseDataBase.Empty -> {
                         _sharedStateFlowDataBase.emit(ResponseDataBase.Empty)
                     }
-                    is ResponseDataBase.Success -> {
-                        _sharedStateFlowDataBase.emit(ResponseDataBase.Success(it.value))
+                    is ResponseDataBase.SuccessNotList -> {
+                        _sharedStateFlowDataBase.emit(ResponseDataBase.SuccessNotList(it.value))
                     }
                     is ResponseDataBase.Failure -> {
                         _sharedStateFlowDataBase.emit(ResponseDataBase.Failure(it.errorBody))
@@ -71,9 +83,15 @@ class ListFilterViewModel(
         }
     }
 
-    fun changeFilter(filter:Filter) {
+    fun changeFilter(filter: Filter) {
         viewModelScope.launch(Dispatchers.IO + coroutineException) {
-            filtersRepository.insert(listOf(filter))
+            markerManager.filtersRepository.insert(filter)
+        }
+    }
+
+    fun clearFilter() {
+        viewModelScope.launch(Dispatchers.IO + coroutineException) {
+            markerManager.filtersRepository.delete()
         }
     }
 
@@ -84,9 +102,9 @@ class ListFilterViewModel(
 }
 
 class FactoryListFilterView @Inject constructor(
-    private val filtersRepository: FiltersRepository
+    private val markerManager: MarkerManager,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ListFilterViewModel(filtersRepository) as T
+        return ListFilterViewModel(markerManager) as T
     }
 }

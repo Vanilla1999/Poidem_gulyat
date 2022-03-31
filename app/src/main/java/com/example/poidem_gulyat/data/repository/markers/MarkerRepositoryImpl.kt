@@ -1,6 +1,7 @@
 package com.example.poidem_gulyat.data.repository.markers
 
 import com.example.poidem_gulyat.data.ResponseDataBase
+import com.example.poidem_gulyat.data.dto.Filter
 
 import com.example.poidem_gulyat.data.dto.MarkerPoint
 import com.example.poidem_gulyat.data.dto.UserLocation
@@ -26,6 +27,10 @@ class MarkerRepositoryImpl @Inject constructor(
         return  databaseSource.marker().getAllMarksers().transform {
             doWork(it, this)
         }.flowOn(Dispatchers.IO)
+    }
+
+    override fun getAllMarksersWithFilter(filter: Filter): Flow<ResponseDataBase<MarkerPoint>> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getAllMarkersByType(type: Int): Flow<ResponseDataBase<MarkerPoint>> {

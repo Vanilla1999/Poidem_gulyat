@@ -2,6 +2,7 @@ package com.example.poidem_gulyat.data.repository.markers
 
 
 import com.example.poidem_gulyat.data.ResponseDataBase
+import com.example.poidem_gulyat.data.dto.Filter
 
 import com.example.poidem_gulyat.data.dto.MarkerPoint
 
@@ -20,6 +21,8 @@ interface MarkerRepository :MainRepo<MarkerPoint> {
     suspend fun getAllMarkersSuitRating(rating:Double): Flow<ResponseDataBase<MarkerPoint>>
 
     suspend fun getAllMarksers(): Flow<ResponseDataBase<MarkerPoint>>
+
+     fun getAllMarksersWithFilter(filter:Filter): Flow<ResponseDataBase<MarkerPoint>>
 
     suspend fun getAllMarkersByType(type:Int): Flow<ResponseDataBase<MarkerPoint>>
 

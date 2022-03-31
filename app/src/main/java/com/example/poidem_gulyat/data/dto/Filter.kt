@@ -9,15 +9,10 @@ import androidx.room.PrimaryKey
 )
 data class Filter(
     @PrimaryKey
-    val id:Int,
-    var sortByRating: Int = 0,
-    var bestNearby: Int = 0,
+    val id: Int = 0,
+    var typeSort: Int = 0,
     var rating: Int = 0,
-    var attraction: Int = 0,
-    var photoZone: Int = 0,
-    var userPoint: Int = 0,
-    var paid: Int = 0,
+    var typeMarker: Int = 0,
+    var price: Int = 0,
     var open: Int = 0,
-    var close: Int = 0,
-    var free: Int = 0
 )

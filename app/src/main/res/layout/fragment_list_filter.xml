@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:clickable="true"
     android:fitsSystemWindows="false"
     tools:context=".ui.homeActivity.dashboard.listFilter.ListFilterFragment">
 
@@ -23,17 +24,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="20dp"
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="@+id/guidelineHorizontal3"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineHorizontal4"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:listitem="@layout/item_recycler_view_filters_rating" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"
         android:layout_width="wrap_content"
@@ -47,10 +49,47 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontal3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.87" />
+
+    <com.example.poidem_gulyat.utils.customView.CustomTitleFilter
+        android:id="@+id/customText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_half_margin"
+
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <com.example.poidem_gulyat.utils.customView.CustomTitleFilter
+        android:id="@+id/customText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal3"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@+id/customText1" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/gray"
+    app:layout_constraintEnd_toStartOf="@+id/guidelineVertical1"
+    app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+    app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+
+</View>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
 </androidx.constraintlayout.widget.ConstraintLayout>

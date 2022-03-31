@@ -14,22 +14,21 @@ import javax.inject.Inject
 class FiltersRepositoryImpl @Inject constructor(
     private val databaseSource: DatabaseMain
 ):FiltersRepository, BaseRepositoryDataBase() {
-    override suspend fun getFilters(): Flow<ResponseDataBase<Filter>> {
+    override  fun getFilters(): Flow<ResponseDataBase<Filter>> {
       return  databaseSource.filters().getFilter().transform {
-            doWork(it, this)
+          doWorkNotList(it, Filter(),this)
         }.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun insert(item: List<Filter>) {
+    override suspend fun insert(item: Filter) {
         databaseSource.filters().insertOrUpdate(item)
     }
 
-    override suspend fun delete(list: List<Filter>) {
-        databaseSource.filters().delete(list)
+    override suspend fun insertOrIgnore(item: Filter) {
+        databaseSource.filters().insertOrIgnore(item)
     }
 
     override suspend fun delete() {
         databaseSource.filters().nukeTable()
     }
-
 }

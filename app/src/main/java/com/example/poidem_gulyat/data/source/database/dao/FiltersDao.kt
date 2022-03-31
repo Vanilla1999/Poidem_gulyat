@@ -9,7 +9,20 @@ import kotlinx.coroutines.flow.Flow
 abstract class FiltersDao : BaseDao<Filter>() {
 
     @Query("SELECT * FROM filters")
-    abstract fun getFilter(): Flow<List<Filter>>
+    abstract fun getFilter(): Flow<Filter>
+
+    @Query("UPDATE filters SET typeSort = :typeSort ")
+    abstract fun updateTypeSort(typeSort:Int)
+
+    @Query("UPDATE filters SET typeMarker = :typeMarker")
+    abstract fun updateType(typeMarker:Int)
+
+    @Query("UPDATE filters SET open = :open")
+    abstract fun updateOpen(open:Int)
+
+    @Query("UPDATE filters SET price = :price")
+    abstract fun updatePrice(price:Int)
+
 
     @Query("DELETE FROM filters")
     abstract fun nukeTable()

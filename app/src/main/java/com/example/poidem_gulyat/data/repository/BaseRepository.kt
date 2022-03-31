@@ -28,4 +28,16 @@ abstract class BaseRepositoryDataBase(
             collector.emit(ResponseDataBase.Failure(e))
         }
     }
+
+    protected suspend fun <T> doWorkNotList(value: T,value2: T ,collector: FlowCollector<ResponseDataBase<T>>) {
+        try {
+            if (value == null || value2 == value ) {
+                collector.emit(ResponseDataBase.Empty)
+            } else {
+                collector.emit(ResponseDataBase.SuccessNotList(value))
+            }
+        } catch (e: Exception) {
+            collector.emit(ResponseDataBase.Failure(e))
+        }
+    }
 }

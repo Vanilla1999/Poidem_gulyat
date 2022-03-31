@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "markers"
 )
 data class MarkerPoint(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Int = 0,
     val name:String,
     val latitude: Double,

@@ -26,6 +26,7 @@ import com.example.poidem_gulyat.di.mainActivtiy.FilterFragmentComponent
 import com.example.poidem_gulyat.ui.homeActivity.MainActivity
 import com.example.poidem_gulyat.ui.homeActivity.OnBackPressedFrament
 import com.example.poidem_gulyat.utils.GenericItemDiff
+import com.example.poidem_gulyat.utils.atStartOfDay
 import com.example.poidem_gulyat.utils.attraction
 import com.example.poidem_gulyat.utils.textChanges
 import kotlinx.coroutines.*
@@ -33,6 +34,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -63,14 +65,20 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
         super.onViewCreated(view, savedInstanceState)
         // binding.motion Base.transitionToEnd()
        // binding.filterContainer.filterContainer.isInteractionEnabled = false
+        Log.d("FilterFragment","onViewCreated")
         navController= findNavController()
         initAdapter()
         initListeners()
         initCrutchMotionLayout()
+        initFlow()
     }
 
-
+    override fun onPause() {
+        super.onPause()
+        Log.d("FilterFragment","onPause")
+    }
     private fun initCrutchMotionLayout(){
+        binding.filterContainer.filterContainer.isInteractionEnabled = false
         binding.filterContainer.filterContainer.setTransitionListener(object :
             MotionLayout.TransitionListener {
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
@@ -121,8 +129,9 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
         binding.filterContainer.filterMain.filtersTextView.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    navController.navigate(R.id.listFilterFragment)
-                }
+                    val action = FilterFragmentDirections.actionNavigationDashboardToListFilterFragment()
+                navController.navigate(action)
+            }
             }
             true
         }
@@ -142,9 +151,41 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
         }
     }
 
+
+    private fun initFlow() {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewModelFilter.markerSharedFlow.collect {
+                it?.let { markerPoint ->
+                    viewModelFilter.markerTouch = true
+                    binding.motionBase.transitionToEnd()
+                    binding.dopInfoHomeMain.dopInfoHome.nameTextView.text = markerPoint.name
+                    binding.dopInfoHomeMain.dopInfoHome.rating.rating =
+                        markerPoint.rating ?: 0.0f
+                    binding.dopInfoHomeMain.dopInfoHome.descriptionTextView.text =
+                        markerPoint.description
+                    markerPoint.endWork?.let {
+                        val currentDate = Date(System.currentTimeMillis())
+                        val timeToClose =
+                            atStartOfDay(currentDate).time + markerPoint.endWork
+                        binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                            if (timeToClose > currentDate.time) getString(R.string.works_pattern,
+                                markerPoint.endWork / (60 * 60 * 1000L))
+                            else getString(R.string.close)
+                    } ?: run {
+                        binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
+                            getString(R.string.time_not_specified)
+                    }
+                } ?: run {
+                    viewModelFilter.markerTouch = false
+                }
+            }
+        }
+    }
+
     private fun initAdapter() {
         adapter = FilterAdapter {
-
+            binding.filterContainer.filterContainer.transitionToState(R.id.start)
+            binding.motionBase.transitionToStart()
         }
         adapter.setDiff(diffUtil)
         binding.filterContainer.filterContainer2.recyclerView.adapter = adapter
@@ -152,7 +193,6 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
         binding.filterContainer.filterContainer2.recyclerView.addItemDecoration(
             DividerItemDecoration(context,
                 LinearLayoutManager.VERTICAL))
-             viewModelFilter.getAllMarkers()
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModelFilter.sharedStateFlowDataBase.collect {
                 when (it) {
@@ -235,8 +275,9 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
         binding.filterContainer.filterContainer.transitionToState(R.id.end2)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("FilterFragment","onDestroy")
     }
 
     override fun onBack(): Boolean {

@@ -31,6 +31,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motion_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="#00000000"
+        android:clickable="false"
+        app:layoutDescription="@xml/fragment_home_scene"
+        >
+        <include
+            android:id="@+id/dopInfoHomeMain"
+            layout="@layout/dop_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1000dp"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+
     <TextView
         android:id="@+id/text_dashboard"
         android:layout_width="match_parent"

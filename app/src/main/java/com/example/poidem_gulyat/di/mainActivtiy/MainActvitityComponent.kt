@@ -21,9 +21,10 @@ class MainModule {
     @Provides
     @MainActivityScope
     fun provideMarkerManager(
-         markerRepository: MarkerRepository
+         markerRepository: MarkerRepository,
+         filtersRepository: FiltersRepository
     ):MarkerManager{
-        return MarkerManager(markerRepository)
+        return MarkerManager(markerRepository,filtersRepository)
     }
 }
 

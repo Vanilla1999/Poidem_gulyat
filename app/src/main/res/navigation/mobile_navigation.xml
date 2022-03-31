@@ -18,7 +18,11 @@
         tools:layout="@layout/fragment_dashboard" >
         <action
             android:id="@+id/action_navigation_dashboard_to_listFilterFragment"
-            app:destination="@id/listFilterFragment" />
+            app:destination="@id/listFilterFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/stationary"
+            app:popEnterAnim="@anim/stationary"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
 
     <fragment

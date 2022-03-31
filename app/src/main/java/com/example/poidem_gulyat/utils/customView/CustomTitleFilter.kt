@@ -21,27 +21,15 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
         style = Paint.Style.STROKE
         flags = Paint.ANTI_ALIAS_FLAG
     }
-    private val paint2: Paint = Paint().apply {
-        color = Color.GREEN
-        strokeWidth = 8f
-        style = Paint.Style.STROKE
-        flags = Paint.ANTI_ALIAS_FLAG
-    }
+
     private var text: String = "Сортировать по"
+    var setPaintBlackStroke = false
 
 
-    var heightSliceRect = 0f
-    var heightSliceRectMod4 = 0f
-    var heightSliceRectMod3 = 0f
-    var heightSliceRectMod2 = 0f
-    var widthSliceRect = 0f
-    private var lastXTouch: Float = 0.0f
-    private var lastYTouch: Float = 0.0f
-    var sum = 0f
+
     var radius: Float = 0f
     var radiusForAnim: Float = 0f
 
-    var innerRadius: Float = 0f
 
     var midWidth: Float = 0f
     var midHeight: Float = 0f
@@ -49,21 +37,11 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
     var rightWidth: Float = 0f
     var topHight: Float = 0f
     var bottomHight: Float = 0f
-    private var region = Region()
-
-    private var innerRect = RectF()
-    private var sliceRect1 = RectF()
-    private var sliceRect2 = RectF()
     private var sliceRect3 = RectF()
     private var isAnimate = false
     private var isDraw = false
     var listener: ClickListener? = null
     var listenerDraw: DrawListener? = null
-    val rec: RectF = RectF()
-    val recFirst: RectF = RectF()
-    val recSecond: RectF = RectF()
-    val recThird: RectF = RectF()
-    val rec2: RectF = RectF()
 
     fun setlistener(listener: ClickListener) {
         this.listener = listener
@@ -78,11 +56,6 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
     }
 
 
-    private val list = ArrayList<Int>()
-    private var maxValue = 0
-    private var defaultWidth = 250
-    var widhtPerView = 0
-
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleFilter)
         paintWhite.textSize =
@@ -93,9 +66,6 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val fm: Paint.FontMetrics = paintWhite.fontMetrics
         val textHeight = fm.bottom - fm.top + fm.leading;
         val textWidth = paintWhite.measureText(text)
@@ -126,8 +96,6 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
         super.onLayout(changed, left, top, right, bottom)
     }
 
-    var currentAngle: Float = 0f
-    val pathForTextBox = Path()
     var firstTimeDraw = true
 
     private fun Canvas.setRectForNameSlice() {
@@ -137,9 +105,6 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
             rightWidth,
             bottomHight
         )
-    }
-
-    private fun Canvas.setChartBody() {
     }
 
     private fun Paint.getTextBaseLineByCenter(center: Float) = center + descent()
@@ -197,6 +162,17 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
         invalidate()
     }
 
+    fun setPaintBlackFull(){
+        paint.color = Color.BLACK
+        paint.style = Paint.Style.FILL
+        paintWhite.color = Color.WHITE
+    }
+
+    fun setPaintBlackStroke(){
+        paint.color = Color.BLACK
+        setPaintBlackStroke = true
+    }
+
     fun startAnimation() {
 
         if (isDraw) {
@@ -235,6 +211,7 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
         } else{
             paint.color = Color.BLACK
         }
+        invalidate()
     }
 
 
@@ -243,6 +220,7 @@ class CustomTitleFilter(context: Context, attrs: AttributeSet?) : View(context, 
         if (isDraw) {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
+                    if(!setPaintBlackStroke)
                     if (paint.color == Color.GRAY)
                         paint.color = Color.BLACK else paint.color = Color.GRAY
                     listener!!.onClick()

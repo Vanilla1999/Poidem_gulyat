@@ -11,6 +11,9 @@ abstract class MarkserDao : BaseDao<MarkerPoint>() {
     @Query("SELECT * FROM markers ORDER BY rating DESC")
     abstract fun getAllMarksers(): Flow<List<MarkerPoint>>
 
+    @Query("SELECT COUNT(*) FROM markers")
+    abstract fun getCountMarkers(): Flow<Int>
+
     @Query("SELECT * FROM markers WHERE rating >=:rating ORDER BY rating DESC")
     abstract fun getAllMarkerSuitRating(rating:Double): Flow<List<MarkerPoint>>
 
