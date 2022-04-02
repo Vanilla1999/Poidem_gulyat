@@ -1,9 +1,7 @@
 package com.example.poidem_gulyat.data.repository.markers
 
-import android.util.Log
 import com.example.poidem_gulyat.data.ResponseDataBase
 import com.example.poidem_gulyat.data.ResponseHome
-import com.example.poidem_gulyat.data.ResponseSplash
 import com.example.poidem_gulyat.data.dto.Filter
 import com.example.poidem_gulyat.data.dto.MarkerPoint
 import com.example.poidem_gulyat.data.repository.filter.FiltersRepository
@@ -11,7 +9,6 @@ import com.example.poidem_gulyat.utils.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import java.util.*
-import javax.inject.Inject
 
 data class MarkerManager constructor(
     val markerRepository: MarkerRepository,
@@ -19,7 +16,7 @@ data class MarkerManager constructor(
 ) {
     val locationFlow: MutableStateFlow<ResponseHome> = MutableStateFlow(ResponseHome.Non)
     val markerFlow: MutableSharedFlow<MarkerPoint?> =
-        MutableSharedFlow(replay = 1, extraBufferCapacity = 0, BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow(replay = 1, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
     val markerPointFromFilters: MutableSharedFlow<List<MarkerPoint>> =
         MutableSharedFlow(replay = 1, extraBufferCapacity = 0, BufferOverflow.DROP_OLDEST)
     val markerFlowToMain: MutableSharedFlow<MarkerPoint?> =

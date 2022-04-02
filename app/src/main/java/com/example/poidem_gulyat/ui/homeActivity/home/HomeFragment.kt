@@ -1,11 +1,8 @@
 package com.example.poidem_gulyat.ui.homeActivity.home
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
 import android.content.Context
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -13,22 +10,17 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.data.ResponseHome
-import com.example.poidem_gulyat.data.dto.Attraction
-import com.example.poidem_gulyat.data.dto.PhotoZone
-import com.example.poidem_gulyat.data.dto.UserPoint
 import com.example.poidem_gulyat.databinding.FragmentHomeBinding
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerHomeFragmentComponent
 import com.example.poidem_gulyat.di.mainActivtiy.HomeFragmentComponent
 import com.example.poidem_gulyat.services.LocationService
 import com.example.poidem_gulyat.ui.homeActivity.MainActivity
 import com.example.poidem_gulyat.ui.homeActivity.OnBackPressedFrament
-import com.example.poidem_gulyat.utils.attraction
-import com.example.poidem_gulyat.utils.photoZone
-import com.example.poidem_gulyat.utils.tryCast
-import com.example.poidem_gulyat.utils.userPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.osmdroid.api.IMapController
@@ -55,7 +47,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CoroutineScope,
     private val viewModelHome by viewModels<HomeViewModel> { factory }
 
     private val binding: FragmentHomeBinding by viewBinding()
-
+    private lateinit var navController: NavController
     override fun onAttach(context: Context) {
         super.onAttach(context)
         this.context = context as MainActivity
@@ -67,6 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CoroutineScope,
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("kek", " onViewCreated ")
         binding.attractionButton.setOnClickListener {
             viewModelHome.attractionButtonClick()
         }
@@ -152,6 +145,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CoroutineScope,
             false
         }
         initFlow()
+        navController = findNavController()
     }
 
     private fun atStartOfDay(date: Date): Date {
@@ -168,29 +162,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CoroutineScope,
     private fun initFlow() {
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModelHome.markerSharedFlow.collect {
-                it?.let { markerPoint ->
-                    viewModelHome.markerTouch = true
-                    binding.motionBase.transitionToEnd()
-                    binding.dopInfoHomeMain.dopInfoHome.nameTextView.text = markerPoint.name
-                    binding.dopInfoHomeMain.dopInfoHome.rating.rating =
-                        markerPoint.rating ?: 0.0f
-                    binding.dopInfoHomeMain.dopInfoHome.descriptionTextView.text =
-                        markerPoint.description
-                    markerPoint.endWork?.let {
-                        val currentDate = Date(System.currentTimeMillis())
-                        val timeToClose =
-                            atStartOfDay(currentDate).time + markerPoint.endWork
-                        binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
-                            if (timeToClose > currentDate.time) getString(R.string.works_pattern,
-                                markerPoint.endWork / (60 * 60 * 1000L))
-                            else getString(R.string.close)
-                    } ?: run {
-                        binding.dopInfoHomeMain.dopInfoHome.workTimeTextView.text =
-                            getString(R.string.time_not_specified)
-                    }
-                } ?: run {
-                    viewModelHome.markerTouch = false
-                }
+                val action = HomeFragmentDirections.actionNavigationHomeToInfoFragment()
+                navController.navigate(action)
             }
         }
     }

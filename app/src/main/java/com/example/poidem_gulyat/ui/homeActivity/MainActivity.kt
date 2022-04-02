@@ -8,7 +8,6 @@ import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.preference.PreferenceManager
-import android.provider.ContactsContract
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
@@ -24,18 +23,16 @@ import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.customView.geo.CustomMe
 import com.example.poidem_gulyat.data.DataToMain
 import com.example.poidem_gulyat.data.ErrorApp
-import com.example.poidem_gulyat.data.ResponseDataBase
 import com.example.poidem_gulyat.data.ResponseSplash
-import com.example.poidem_gulyat.data.dto.Attraction
 import com.example.poidem_gulyat.data.dto.MarkerPoint
-import com.example.poidem_gulyat.data.dto.PhotoZone
-import com.example.poidem_gulyat.data.dto.UserPoint
 import com.example.poidem_gulyat.databinding.ActivityMainBinding
 import com.example.poidem_gulyat.di.mainActivtiy.DaggerMainActvitityComponent
 import com.example.poidem_gulyat.di.mainActivtiy.MainActvitityComponent
 import com.example.poidem_gulyat.services.LocationService
-import com.example.poidem_gulyat.ui.homeActivity.home.HomeFragment
-import com.example.poidem_gulyat.utils.*
+import com.example.poidem_gulyat.utils.BaseActivity
+import com.example.poidem_gulyat.utils.attraction
+import com.example.poidem_gulyat.utils.photoZone
+import com.example.poidem_gulyat.utils.userPoint
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -68,7 +65,6 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         get() = job + Dispatchers.IO
     private lateinit var mapController: IMapController
     private var context: MainActivity? = null
-    private lateinit var toast :Toast
     override fun onAfterRequestPermission() {
         //  TODO("Not yet implemented")
     }
@@ -91,7 +87,6 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
         setWindowTransparency { _, navigationBarSize ->
             navView.setPadding(0, 0, 0, navigationBarSize)
         }
-        toast =Toast.makeText(this, "", Toast.LENGTH_LONG)
         initMap()
         initFlowDatabase()
         intiFlowError()
@@ -192,18 +187,12 @@ class MainActivity : BaseActivity(), ServiceConnection, CoroutineScope {
             when(type){
                 attraction ->{
                     paintAttraction(value)
-                    toast.setText("Отображение достопримечательностей")
-                    toast.show()
                 }
                 photoZone ->{
                     paintPhotoZone(value)
-                    toast.setText("Отображение мест от пользователей")
-                    toast.show()
                 }
                 userPoint ->{
                     paintUserPoint(value)
-                    toast.setText("Отображение фото-студий/фото-зон")
-                    toast.show()
                 }
             }
         }

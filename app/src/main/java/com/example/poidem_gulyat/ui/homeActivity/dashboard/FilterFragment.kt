@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.poidem_gulyat.R
 import com.example.poidem_gulyat.data.ResponseDataBase
@@ -63,8 +62,6 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // binding.motion Base.transitionToEnd()
-       // binding.filterContainer.filterContainer.isInteractionEnabled = false
         Log.d("FilterFragment","onViewCreated")
         navController= findNavController()
         initAdapter()
@@ -224,10 +221,6 @@ class FilterFragment : Fragment(R.layout.fragment_dashboard), CoroutineScope, On
                             type = attraction,price = 1000)))
                     }
                     is ResponseDataBase.Success -> {
-                        Toast.makeText(context,
-                            "данные есть",
-                            Toast.LENGTH_LONG)
-                            .show()
                         adapter.update(it.value as List<MarkerPoint>)
                     }
                 }
